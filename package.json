@@ -16,7 +16,9 @@
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@tyle/config": "^1.0.0",
-    "prettier": "^3.1.1"
+    "prettier": "^3.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "husky": "^8.0.3"
