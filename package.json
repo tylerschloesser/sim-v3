@@ -5,7 +5,7 @@
   "scripts": {
     "test": "npm run test:prettier",
     "test:prettier": "prettier --check . --log-level warn",
-    "build": "echo TODO build",
+    "build": "npm run build -w packages/app",
     "deploy": "echo TODO deploy",
     "prepare": "husky install"
   },
