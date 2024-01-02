@@ -6,7 +6,7 @@
     "test": "npm run test:prettier",
     "test:prettier": "prettier --check . --log-level warn",
     "build": "npm run build -w packages/app",
-    "deploy": "echo TODO deploy",
+    "deploy": "npm run deploy -w packages/cdk",
     "prepare": "husky install"
   },
   "prettier": "@tyle/config/prettier.config.cjs",

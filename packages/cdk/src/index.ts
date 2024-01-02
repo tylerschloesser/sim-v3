@@ -12,7 +12,7 @@ new WebAppV1(app, {
     '../../app/dist',
   ),
   domain: {
-    app: 'sim-v3',
+    app: 'sim-v3.slg.dev',
     root: 'slg.dev',
   },
   region: Region.US_WEST_2,
