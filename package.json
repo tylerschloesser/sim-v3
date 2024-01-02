@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "echo TODO test",
+    "test": "npm run test:prettier",
+    "test:prettier": "prettier --check . --log-level warn",
     "build": "echo TODO build",
     "deploy": "echo TODO deploy"
   },
+  "prettier": "@tyle/config/prettier.config.cjs",
   "workspaces": [
     "packages/app"
-  ]
+  ],
+  "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@tyle/config": "^1.0.0",
+    "prettier": "^3.1.1"
+  }
 }
