@@ -7,7 +7,6 @@
     "build": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--loader ts-node/esm\" webpack --mode=production"
   },
   "dependencies": {
-    "@tyle/tsconfig": "^1.0.1",
     "@tyle/webpack-config": "^1.0.4",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",

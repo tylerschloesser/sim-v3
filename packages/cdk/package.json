@@ -1,0 +1,11 @@
+{
+  "name": "cdk",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@tyle/cdk": "^1.0.6",
+    "aws-cdk": "^2.117.0",
+    "aws-cdk-lib": "^2.117.0",
+    "constructs": "^10.3.0"
+  }
+}
