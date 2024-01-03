@@ -1,11 +1,8 @@
+import { initGraphics } from '@sim-v3/graphics'
 import { createContext } from 'react'
 import invariant from 'tiny-invariant'
 
 type RenderFn = () => void
-
-export interface World {
-  seed: string
-}
 
 export interface IContext {
   render: RenderFn
@@ -23,8 +20,12 @@ export function initContext(
   canvas: HTMLCanvasElement,
   { signal }: AbortController,
 ): IContext {
+  const graphics = initGraphics(canvas)
+
   const context: IContext = {
-    render() {},
+    render() {
+      graphics.clear()
+    },
     signal,
   }
 
