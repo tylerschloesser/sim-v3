@@ -5,6 +5,8 @@ export const world = z.strictObject({
 })
 export type World = z.infer<typeof world>
 
-export function initWorld(id: string): World {
+export async function initWorld(
+  id: string,
+): Promise<World> {
   return { id }
 }

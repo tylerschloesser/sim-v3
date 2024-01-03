@@ -1,6 +1,8 @@
 import invariant from 'tiny-invariant'
 
-export function initGraphics(canvas: HTMLCanvasElement) {
+export async function initGraphics(
+  canvas: HTMLCanvasElement,
+) {
   const gl = canvas.getContext('webgl2')
   invariant(gl)
 
@@ -12,4 +14,6 @@ export function initGraphics(canvas: HTMLCanvasElement) {
   }
 }
 
-export type Graphics = ReturnType<typeof initGraphics>
+export type Graphics = Awaited<
+  ReturnType<typeof initGraphics>
+>

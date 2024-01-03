@@ -25,8 +25,11 @@ export async function initContext(
   canvas: HTMLCanvasElement,
   { signal }: AbortController,
 ): Promise<IContext> {
-  const world = initWorld(worldId)
-  const graphics = initGraphics(canvas)
+  const [world, graphics] = await Promise.all([
+    initWorld(worldId),
+    initGraphics(canvas),
+  ])
+
   const game = initGame(world, graphics)
 
   const context: IContext = {

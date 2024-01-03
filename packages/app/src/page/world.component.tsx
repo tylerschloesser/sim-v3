@@ -38,6 +38,7 @@ export function WorldPage() {
       canvas.current,
       controller,
     ).then(setContext)
+
     return () => {
       controller.abort(AbortReason.EffectCleanup)
     }
@@ -51,9 +52,9 @@ export function WorldPage() {
         ></canvas>
       </div>
       {context && (
-        <Context.Provider value={context}>
-          TODO
-        </Context.Provider>
+        <Context.Provider
+          value={context}
+        ></Context.Provider>
       )}
     </>
   )
