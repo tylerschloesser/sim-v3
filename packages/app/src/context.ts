@@ -8,6 +8,11 @@ export interface World {
 
 export interface IContext {
   render: RenderFn
+  signal: AbortSignal
 }
 
 export const Context = createContext<IContext>(null!)
+
+export enum AbortReason {
+  ComponentUnmount = 'component-unmount',
+}

@@ -1,68 +1,97 @@
-import {
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react'
+import { useEffect, useRef, useState } from 'react'
 import invariant from 'tiny-invariant'
-import { Context } from '../context.js'
+import {
+  AbortReason,
+  Context,
+  IContext,
+} from '../context.js'
 import styles from './world.module.scss'
+
+function initContext(
+  container: HTMLDivElement,
+  canvas: HTMLCanvasElement,
+  { signal }: AbortController,
+): IContext {
+  const context: IContext = {
+    render() {},
+    signal,
+  }
+
+  initResizeObserver(container, canvas, signal)
+  initRenderLoop(context, signal)
+
+  return context
+}
 
 export function WorldPage() {
   const container = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
-  useResizeObserver(container, canvas)
-  useRenderLoop(canvas)
+  const [context, setContext] = useState<IContext | null>(
+    null,
+  )
+  useEffect(() => {
+    invariant(container.current)
+    invariant(canvas.current)
+    const controller = new AbortController()
+    setContext(
+      initContext(
+        container.current,
+        canvas.current,
+        controller,
+      ),
+    )
+    return () => {
+      controller.abort(AbortReason.ComponentUnmount)
+    }
+  }, [])
   return (
-    <div className={styles.container} ref={container}>
-      <canvas
-        className={styles.canvas}
-        ref={canvas}
-      ></canvas>
-    </div>
+    <>
+      <div className={styles.container} ref={container}>
+        <canvas
+          className={styles.canvas}
+          ref={canvas}
+        ></canvas>
+      </div>
+      {context && (
+        <Context.Provider value={context}>
+          TODO
+        </Context.Provider>
+      )}
+    </>
   )
 }
 
-function useRenderLoop(
-  canvas: React.RefObject<HTMLCanvasElement>,
+function initRenderLoop(
+  context: IContext,
+  signal: AbortSignal,
 ) {
-  const context = useContext(Context)
-  useEffect(() => {
-    let stop = false
-    function handleFrame() {
-      if (stop) return
-      invariant(canvas.current)
-      context.render()
-      self.requestAnimationFrame(handleFrame)
+  function handleFrame() {
+    if (signal.aborted) {
+      return
     }
+    context.render()
     self.requestAnimationFrame(handleFrame)
-    return () => {
-      stop = true
-    }
-  }, [])
+  }
+  self.requestAnimationFrame(handleFrame)
 }
 
-function useResizeObserver(
-  container: RefObject<HTMLDivElement>,
-  canvas: RefObject<HTMLCanvasElement>,
-) {
-  useEffect(() => {
-    invariant(container.current, 'container ref not set')
-    invariant(canvas.current, 'canvas ref not set')
+function initResizeObserver(
+  container: HTMLDivElement,
+  canvas: HTMLCanvasElement,
+  signal: AbortSignal,
+): void {
+  const observer = new ResizeObserver((entries) => {
+    invariant(entries.length === 1)
+    const entry = entries.at(0)
+    invariant(entry)
+    const { contentRect: rect } = entry
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      invariant(entries.length === 1)
-      const entry = entries.at(0)
-      invariant(entry)
-      invariant(canvas.current)
-      const { contentRect: rect } = entry
+    canvas.width = rect.width
+    canvas.height = rect.height
+  })
+  observer.observe(container)
 
-      canvas.current.width = rect.width
-      canvas.current.height = rect.height
-    })
-    resizeObserver.observe(container.current)
-    return () => {
-      resizeObserver.disconnect()
-    }
-  }, [])
+  signal.addEventListener('abort', () => {
+    observer.disconnect()
+  })
 }
