@@ -1,0 +1,18 @@
+.container {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.header {
+  margin: 0;
+}
+
+.button {
+  border: none;
+  outline: none;
+  background-color: black;
+  color: white;
+  padding: 0.5em;
+}
