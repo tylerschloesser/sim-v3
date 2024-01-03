@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom'
 import invariant from 'tiny-invariant'
+import { Context } from './context.js'
 import './index.scss'
 import { RootPage } from './page/root.component.js'
 import { WorldPage } from './page/world.component.js'
@@ -23,5 +24,7 @@ const router = createBrowserRouter([
 ])
 
 createRoot(container).render(
-  <RouterProvider router={router} />,
+  <Context.Provider value={{ render() {} }}>
+    <RouterProvider router={router} />,
+  </Context.Provider>,
 )
