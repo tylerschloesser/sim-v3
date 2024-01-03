@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "start": "npm start -w packages/app",
     "test": "npm run test:prettier && npm run test:lint && npm run test:jest",
     "test:prettier": "prettier --check . --log-level warn",
     "test:lint": "eslint .",
