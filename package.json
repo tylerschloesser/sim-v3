@@ -17,7 +17,8 @@
     "packages/app",
     "packages/cdk",
     "packages/game",
-    "packages/graphics"
+    "packages/graphics",
+    "packages/world"
   ],
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
