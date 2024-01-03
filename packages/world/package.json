@@ -1,5 +1,6 @@
 {
   "name": "@sim-v3/world",
   "version": "1.0.0",
-  "type": "module"
+  "type": "module",
+  "exports": "./src/index.ts"
 }
