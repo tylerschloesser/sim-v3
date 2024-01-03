@@ -55,9 +55,9 @@ export function WorldPage() {
       ),
     )
     return () => {
-      controller.abort(AbortReason.ComponentUnmount)
+      controller.abort(AbortReason.EffectCleanup)
     }
-  }, [])
+  }, [worldId])
   return (
     <>
       <div className={styles.container} ref={container}>

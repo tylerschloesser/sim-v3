@@ -14,5 +14,5 @@ export interface IContext {
 export const Context = createContext<IContext>(null!)
 
 export enum AbortReason {
-  ComponentUnmount = 'component-unmount',
+  EffectCleanup = 'effect-cleanup',
 }
