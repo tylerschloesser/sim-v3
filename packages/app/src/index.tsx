@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
 } from 'react-router-dom'
 import invariant from 'tiny-invariant'
+import './index.scss'
 import { RootPage } from './page/root.component.js'
 
 const container = document.getElementById('app')

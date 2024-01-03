@@ -1,3 +1,3 @@
 export function RootPage() {
-  return <>TODO root page</>
+  return <>Welcome!</>
 }
