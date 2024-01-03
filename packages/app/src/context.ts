@@ -1,3 +1,4 @@
+import { initGame } from '@sim-v3/game'
 import { initGraphics } from '@sim-v3/graphics'
 import { createContext } from 'react'
 import invariant from 'tiny-invariant'
@@ -23,13 +24,12 @@ export function initContext(
   { signal }: AbortController,
 ): IContext {
   const graphics = initGraphics(canvas)
+  const game = initGame(graphics)
 
   const context: IContext = {
     container,
     canvas,
-    render() {
-      graphics.clear()
-    },
+    render: game.render,
     signal,
   }
 

@@ -1,5 +1,9 @@
 {
-  "name": "@sim-v2/game",
+  "name": "@sim-v3/game",
   "version": "1.0.0",
-  "type": "module"
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@sim-v3/graphics": "^1.0.0"
+  }
 }
