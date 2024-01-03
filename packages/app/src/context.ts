@@ -29,7 +29,6 @@ export async function initContext(
     initWorld(worldId),
     initGraphics(canvas),
   ])
-
   const game = initGame(world, graphics)
 
   const context: IContext = {
