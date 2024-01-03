@@ -33,6 +33,12 @@ export function WorldPage() {
     invariant(container.current)
     invariant(canvas.current)
     const controller = new AbortController()
+
+    // TODO remove this after testing
+    controller.signal.addEventListener('abort', () => {
+      console.log('abort reason:', controller.signal.reason)
+    })
+
     setContext(
       initContext(
         container.current,
