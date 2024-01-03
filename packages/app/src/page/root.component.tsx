@@ -12,7 +12,7 @@ export function RootPage() {
         className={styles.link}
         onClick={(e) => {
           e.preventDefault()
-          navigate('world')
+          navigate('world/test')
         }}
       >
         World

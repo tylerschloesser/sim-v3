@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import invariant from 'tiny-invariant'
 import {
   AbortReason,
@@ -23,7 +24,14 @@ function initContext(
   return context
 }
 
+function useWorldId() {
+  const params = useParams<{ id: string }>()
+  invariant(params.id)
+  return params.id
+}
+
 export function WorldPage() {
+  const worldId = useWorldId()
   const container = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const [context, setContext] = useState<IContext | null>(
