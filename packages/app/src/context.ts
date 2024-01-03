@@ -19,6 +19,7 @@ export enum AbortReason {
 }
 
 export function initContext(
+  worldId: string,
   container: HTMLDivElement,
   canvas: HTMLCanvasElement,
   { signal }: AbortController,

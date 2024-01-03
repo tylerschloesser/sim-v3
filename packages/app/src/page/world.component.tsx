@@ -34,6 +34,7 @@ export function WorldPage() {
 
     setContext(
       initContext(
+        worldId,
         container.current,
         canvas.current,
         controller,
