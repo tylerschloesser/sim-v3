@@ -19,12 +19,12 @@ export enum AbortReason {
   EffectCleanup = 'effect-cleanup',
 }
 
-export function initContext(
+export async function initContext(
   worldId: string,
   container: HTMLDivElement,
   canvas: HTMLCanvasElement,
   { signal }: AbortController,
-): IContext {
+): Promise<IContext> {
   const world = initWorld(worldId)
   const graphics = initGraphics(canvas)
   const game = initGame(world, graphics)
