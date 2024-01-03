@@ -5,24 +5,9 @@ import {
   AbortReason,
   Context,
   IContext,
+  initContext,
 } from '../context.js'
 import styles from './world.module.scss'
-
-function initContext(
-  container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
-  { signal }: AbortController,
-): IContext {
-  const context: IContext = {
-    render() {},
-    signal,
-  }
-
-  initResizeObserver(container, canvas, signal)
-  initRenderLoop(context, signal)
-
-  return context
-}
 
 function useWorldId() {
   const params = useParams<{ id: string }>()
@@ -73,39 +58,4 @@ export function WorldPage() {
       )}
     </>
   )
-}
-
-function initRenderLoop(
-  context: IContext,
-  signal: AbortSignal,
-) {
-  function handleFrame() {
-    if (signal.aborted) {
-      return
-    }
-    context.render()
-    self.requestAnimationFrame(handleFrame)
-  }
-  self.requestAnimationFrame(handleFrame)
-}
-
-function initResizeObserver(
-  container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
-  signal: AbortSignal,
-): void {
-  const observer = new ResizeObserver((entries) => {
-    invariant(entries.length === 1)
-    const entry = entries.at(0)
-    invariant(entry)
-    const { contentRect: rect } = entry
-
-    canvas.width = rect.width
-    canvas.height = rect.height
-  })
-  observer.observe(container)
-
-  signal.addEventListener('abort', () => {
-    observer.disconnect()
-  })
 }
