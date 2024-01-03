@@ -15,7 +15,8 @@
   "prettier": "@tyle/config/prettier.config.cjs",
   "workspaces": [
     "packages/app",
-    "packages/cdk"
+    "packages/cdk",
+    "packages/game"
   ],
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
