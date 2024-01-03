@@ -5,6 +5,8 @@ import invariant from 'tiny-invariant'
 type RenderFn = () => void
 
 export interface IContext {
+  container: HTMLDivElement
+  canvas: HTMLCanvasElement
   render: RenderFn
   signal: AbortSignal
 }
@@ -23,22 +25,22 @@ export function initContext(
   const graphics = initGraphics(canvas)
 
   const context: IContext = {
+    container,
+    canvas,
     render() {
       graphics.clear()
     },
     signal,
   }
 
-  initResizeObserver(container, canvas, signal)
-  initRenderLoop(context, signal)
+  initResizeObserver(context)
+  initRenderLoop(context)
 
   return context
 }
 
-function initRenderLoop(
-  context: IContext,
-  signal: AbortSignal,
-) {
+function initRenderLoop(context: IContext) {
+  const { signal } = context
   function handleFrame() {
     if (signal.aborted) {
       return
@@ -49,11 +51,8 @@ function initRenderLoop(
   self.requestAnimationFrame(handleFrame)
 }
 
-function initResizeObserver(
-  container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
-  signal: AbortSignal,
-): void {
+function initResizeObserver(context: IContext): void {
+  const { canvas, container, signal } = context
   const observer = new ResizeObserver((entries) => {
     invariant(entries.length === 1)
     const entry = entries.at(0)
