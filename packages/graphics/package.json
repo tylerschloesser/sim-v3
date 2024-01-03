@@ -1,5 +1,6 @@
 {
-  "name": "graphics",
+  "name": "@sim-v3/graphics",
   "version": "1.0.0",
-  "type": "module"
+  "type": "module",
+  "exports": "./src/index.ts"
 }

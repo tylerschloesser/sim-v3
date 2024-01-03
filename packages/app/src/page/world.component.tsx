@@ -1,8 +1,12 @@
-import { useContext, useEffect, useRef } from 'react'
+import {
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
 import invariant from 'tiny-invariant'
 import { Context } from '../context.js'
 import styles from './world.module.scss'
-import { useResizeObserver } from './world.use-resize-observer.js'
 
 export function WorldPage() {
   const container = useRef<HTMLDivElement>(null)
@@ -34,6 +38,31 @@ function useRenderLoop(
     self.requestAnimationFrame(handleFrame)
     return () => {
       stop = true
+    }
+  }, [])
+}
+
+function useResizeObserver(
+  container: RefObject<HTMLDivElement>,
+  canvas: RefObject<HTMLCanvasElement>,
+) {
+  useEffect(() => {
+    invariant(container.current, 'container ref not set')
+    invariant(canvas.current, 'canvas ref not set')
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      invariant(entries.length === 1)
+      const entry = entries.at(0)
+      invariant(entry)
+      invariant(canvas.current)
+      const { contentRect: rect } = entry
+
+      canvas.current.width = rect.width
+      canvas.current.height = rect.height
+    })
+    resizeObserver.observe(container.current)
+    return () => {
+      resizeObserver.disconnect()
     }
   }, [])
 }
