@@ -15,6 +15,18 @@ export async function initGraphics(
   const gl = canvas.getContext('webgl2')
   invariant(gl)
 
+  const program = initProgram(gl)
+  gl.useProgram(program)
+
+  return {
+    clear: () => clear(gl),
+    drawGrid: curry(drawGrid)(gl),
+  }
+}
+
+function initProgram(
+  gl: WebGL2RenderingContext,
+): WebGLProgram {
   const program = gl.createProgram()
   invariant(program)
 
@@ -27,10 +39,13 @@ export async function initGraphics(
     initShader(gl, gl.FRAGMENT_SHADER, fragSource),
   )
 
-  return {
-    clear: () => clear(gl),
-    drawGrid: curry(drawGrid)(gl),
+  gl.linkProgram(program)
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    // prettier-ignore
+    invariant(false, `Error linking program: ${gl.getProgramInfoLog(program)}`)
   }
+
+  return program
 }
 
 type ShaderType = number
