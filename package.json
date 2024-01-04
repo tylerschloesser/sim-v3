@@ -19,7 +19,8 @@
     "packages/game",
     "packages/graphics",
     "packages/world",
-    "packages/core"
+    "packages/core",
+    "packages/camera"
   ],
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
