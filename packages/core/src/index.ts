@@ -12,10 +12,9 @@ export interface Camera {
   zoom: number
 }
 
-export const initCamera: InitFn<Camera> = async () => {
-  const position: Vec2 = { x: 0, y: 0 }
-  const zoom: number = 0.5
-  return { position, zoom }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getCellSize(camera: Camera): number {
+  return 100
 }
 
 export interface Viewport {
@@ -25,11 +24,6 @@ export interface Viewport {
 // https://stackoverflow.com/a/17323608
 export function mod(n: number, m: number): number {
   return ((n % m) + m) % m
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getCellSize(camera: Camera): number {
-  return 100
 }
 
 export interface InitArgs {

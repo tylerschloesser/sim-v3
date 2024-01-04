@@ -1,4 +1,5 @@
-import { InitFn, initCamera } from '@sim-v3/core'
+import { initCamera } from '@sim-v3/camera'
+import { InitFn } from '@sim-v3/core'
 import { initGame } from '@sim-v3/game'
 import { initGraphics } from '@sim-v3/graphics'
 import { initWorld } from '@sim-v3/world'
