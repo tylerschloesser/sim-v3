@@ -45,12 +45,12 @@ export const initContext: InitFn<IContext> = async (
 
 function startRenderLoop(context: IContext) {
   const { signal } = context
-  function handleFrame() {
+  function render() {
     if (signal.aborted) {
       return
     }
     context.render()
-    self.requestAnimationFrame(handleFrame)
+    self.requestAnimationFrame(render)
   }
-  self.requestAnimationFrame(handleFrame)
+  self.requestAnimationFrame(render)
 }
