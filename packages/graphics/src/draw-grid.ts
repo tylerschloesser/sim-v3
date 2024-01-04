@@ -20,4 +20,13 @@ export function drawGrid(
 
   // TODO document this
   mat4Scale(transform, 2)
+
+  mat4Scale(
+    transform,
+    1 / viewport.size.x,
+    1 / viewport.size.y,
+  )
+
+  // TODO document this
+  mat4Translate(transform, -0.5)
 }
