@@ -44,7 +44,7 @@ export async function initGraphics(
     color: getUniformLocation(gl, program, 'uColor')
   }
 
-  gl.uniform4f(uniforms.color, 0, 0, 1, 1)
+  gl.uniform4f(uniforms.color, 1, 1, 1, 1)
 
   const buffers = initBuffers(gl)
 
