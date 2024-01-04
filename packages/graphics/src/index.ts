@@ -1,4 +1,4 @@
-import { Vec2 } from '@sim-v3/core'
+import { Vec2, Viewport } from '@sim-v3/core'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
 import { drawGrid } from './draw-grid.js'
@@ -14,7 +14,11 @@ import vertSource from './vert.glsl'
 
 export interface Graphics {
   clear(): void
-  drawGrid(center: Vec2, cellSize: number): void
+  drawGrid(
+    center: Vec2,
+    cellSize: number,
+    viewport: Viewport,
+  ): void
 }
 
 export async function initGraphics(

@@ -11,7 +11,7 @@ export function initGame(
   return {
     render() {
       graphics.clear()
-      graphics.drawGrid(camera.position, 20)
+      graphics.drawGrid(camera.position, 20, viewport)
     },
   }
 }

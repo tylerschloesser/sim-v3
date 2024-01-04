@@ -1,3 +1,4 @@
+import { Viewport } from '@sim-v3/core'
 import { mat4, vec2 } from 'gl-matrix'
 import { mat4Scale, mat4Translate } from './util.js'
 
@@ -7,6 +8,7 @@ export function drawGrid(
   gl: WebGL2RenderingContext,
   center: vec2,
   cellSize: number,
+  viewport: Viewport,
 ): void {
   mat4.identity(transform)
 
