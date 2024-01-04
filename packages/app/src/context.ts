@@ -1,3 +1,4 @@
+import { initCamera } from '@sim-v3/core'
 import { initGame } from '@sim-v3/game'
 import { initGraphics } from '@sim-v3/graphics'
 import { initWorld } from '@sim-v3/world'
@@ -25,11 +26,12 @@ export async function initContext(
   canvas: HTMLCanvasElement,
   { signal }: AbortController,
 ): Promise<IContext> {
-  const [world, graphics] = await Promise.all([
+  const [world, camera, graphics] = await Promise.all([
     initWorld(worldId),
+    initCamera(),
     initGraphics(canvas),
   ])
-  const game = initGame(world, graphics)
+  const game = initGame(world, camera, graphics)
 
   const context: IContext = {
     container,
