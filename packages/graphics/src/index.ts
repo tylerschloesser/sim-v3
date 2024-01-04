@@ -1,6 +1,7 @@
 import { Vec2 } from '@sim-v3/core'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
+import { drawGrid } from './draw-grid.js'
 import fragSource from './frag.glsl'
 import {
   Attributes,
@@ -88,12 +89,6 @@ function clear(gl: WebGL2RenderingContext): void {
   gl.clearColor(1, 0, 0, 1)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
-
-function drawGrid(
-  gl: WebGL2RenderingContext,
-  center: Vec2,
-  cellSize: number,
-): void {}
 
 function getUniformLocation(
   gl: WebGL2RenderingContext,
