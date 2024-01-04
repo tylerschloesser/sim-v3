@@ -25,14 +25,20 @@ export interface Graphics {
   drawGrid(camera: Camera): void
 }
 
-export const initGraphics: InitFn<Graphics> = async (
-  args,
-) => {
-  const viewport = await initViewport(args)
-
-  const { canvas } = args
+export const initGraphics: InitFn<Graphics> = async ({
+  container,
+  canvas,
+  signal,
+}) => {
   const gl = canvas.getContext('webgl2')
   invariant(gl)
+
+  const viewport = initViewport(
+    container,
+    canvas,
+    signal,
+    gl,
+  )
 
   const program = initProgram(gl)
   gl.useProgram(program)

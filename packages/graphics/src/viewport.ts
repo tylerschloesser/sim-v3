@@ -1,35 +1,47 @@
-import { InitFn, Viewport } from '@sim-v3/core'
+import { Viewport } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
-export const initViewport: InitFn<Viewport> = async (
-  args,
-) => {
-  const { container, canvas, signal } = args
+type UpdateViewportFn = (rect: DOMRectReadOnly) => void
+
+export function initViewport(
+  container: HTMLDivElement,
+  canvas: HTMLCanvasElement,
+  signal: AbortSignal,
+  gl: WebGL2RenderingContext,
+): Viewport {
   const viewport: Viewport = {
     size: { x: 0, y: 0 },
   }
-  initResizeObserver(container, canvas, signal, viewport)
-  initDevicePixelRatioListener(canvas, signal, viewport)
+
+  const updateViewport: UpdateViewportFn = (rect) => {
+    const devicePixelRatio = getDevicePixelRatio()
+    const width = rect.width * devicePixelRatio
+    const height = rect.height * devicePixelRatio
+    viewport.size.x = canvas.width = width
+    viewport.size.y = canvas.height = height
+    gl.viewport(0, 0, width, height)
+  }
+
+  initResizeObserver(container, signal, updateViewport)
+  initDevicePixelRatioListener(
+    canvas,
+    signal,
+    updateViewport,
+  )
 
   return viewport
 }
 
 function initResizeObserver(
   container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
   signal: AbortSignal,
-  viewport: Viewport,
+  updateViewport: UpdateViewportFn,
 ): void {
   const observer = new ResizeObserver((entries) => {
     invariant(entries.length === 1)
     const entry = entries.at(0)
     invariant(entry)
-    const { contentRect: rect } = entry
-    const devicePixelRatio = getDevicePixelRatio()
-    viewport.size.x = canvas.width =
-      rect.width * devicePixelRatio
-    viewport.size.y = canvas.height =
-      rect.height * devicePixelRatio
+    updateViewport(entry.contentRect)
   })
   observer.observe(container)
 
@@ -41,18 +53,13 @@ function initResizeObserver(
 function initDevicePixelRatioListener(
   canvas: HTMLCanvasElement,
   signal: AbortSignal,
-  viewport: Viewport,
+  updateViewport: UpdateViewportFn,
 ): void {
   function updateListener() {
     const query = `(resolution: ${getDevicePixelRatio()}dppx)`
     const media = matchMedia(query)
     function listener() {
-      const rect = canvas.getBoundingClientRect()
-      const devicePixelRatio = getDevicePixelRatio()
-      viewport.size.x = canvas.width =
-        rect.width * devicePixelRatio
-      viewport.size.y = canvas.height =
-        rect.height * devicePixelRatio
+      updateViewport(canvas.getBoundingClientRect())
       media.removeEventListener('change', listener)
       updateListener()
     }
