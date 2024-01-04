@@ -1,17 +1,15 @@
 import { Vec2, Viewport, mod } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
-import { Attributes, Uniforms } from './types.js'
+import { Context } from './context.js'
 import { mat4Scale, mat4Translate } from './util.js'
 
 const transform: mat4 = mat4.create()
 
 export function drawGrid(
-  gl: WebGL2RenderingContext,
+  { gl, uniforms }: Context,
   center: Vec2,
   cellSize: number,
   viewport: Viewport,
-  uniforms: Uniforms,
-  attributes: Attributes,
 ): void {
   mat4.identity(transform)
 

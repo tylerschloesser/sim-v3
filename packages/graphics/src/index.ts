@@ -1,6 +1,7 @@
 import { Vec2, Viewport } from '@sim-v3/core'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
+import { Context } from './context.js'
 import { drawGrid } from './draw-grid.js'
 import fragSource from './frag.glsl'
 import {
@@ -43,9 +44,15 @@ export async function initGraphics(
 
   gl.uniform4f(uniforms.color, 0, 0, 1, 1)
 
+  const context: Context = {
+    gl,
+    uniforms,
+    attributes,
+  }
+
   return {
     clear: () => clear(gl),
-    drawGrid: curry(drawGrid)(gl),
+    drawGrid: curry(drawGrid)(context),
   }
 }
 
