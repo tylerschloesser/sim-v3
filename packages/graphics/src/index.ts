@@ -2,12 +2,17 @@ import { Vec2 } from '@sim-v3/core'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
 import fragSource from './frag.glsl'
+import {
+  Attributes,
+  Graphics,
+  ShaderSource,
+  ShaderType,
+  Uniforms,
+  WebGLAttributeLocation,
+} from './types.js'
 import vertSource from './vert.glsl'
 
-export interface Graphics {
-  clear(): void
-  drawGrid(center: Vec2, cellSize: number): void
-}
+export { Graphics } from './types.js'
 
 export async function initGraphics(
   canvas: HTMLCanvasElement,
@@ -17,6 +22,17 @@ export async function initGraphics(
 
   const program = initProgram(gl)
   gl.useProgram(program)
+
+  const attributes: Attributes = {
+    vertex: getAttribLocation(gl, program, 'aVertex'),
+    matrix: getAttribLocation(gl, program, 'aMatrix'),
+  }
+
+  // prettier-ignore
+  const uniforms: Uniforms = {
+    transform: getUniformLocation(gl, program, 'uTransform'),
+    color: getUniformLocation(gl, program, 'uColor')
+  }
 
   return {
     clear: () => clear(gl),
@@ -48,9 +64,6 @@ function initProgram(
   return program
 }
 
-type ShaderType = number
-type ShaderSource = string
-
 function initShader(
   gl: WebGL2RenderingContext,
   type: ShaderType,
@@ -77,3 +90,23 @@ function drawGrid(
   center: Vec2,
   cellSize: number,
 ): void {}
+
+function getUniformLocation(
+  gl: WebGL2RenderingContext,
+  program: WebGLProgram,
+  name: string,
+) {
+  const location = gl.getUniformLocation(program, name)
+  invariant(location)
+  return location
+}
+
+function getAttribLocation(
+  gl: WebGL2RenderingContext,
+  program: WebGLProgram,
+  name: string,
+): WebGLAttributeLocation {
+  const location = gl.getAttribLocation(program, name)
+  invariant(location !== -1)
+  return location
+}
