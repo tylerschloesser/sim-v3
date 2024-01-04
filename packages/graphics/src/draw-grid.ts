@@ -12,7 +12,29 @@ export function drawGrid(
   cellSize: number,
   viewport: Viewport,
 ): void {
-  const { gl, uniforms, attributes, buffers } = context
+  const { gl, buffers } = context
+
+  updateTransform(context, center, cellSize, viewport)
+
+  bindVertexBuffer(context)
+
+  const { matrices } = buffers.matrix
+  const cols = Math.ceil(viewport.size.x / cellSize) + 1
+  const rows = Math.ceil(viewport.size.y / cellSize) + 1
+  invariant(cols + rows <= matrices.length)
+
+  bindMatrixBuffer(context, cellSize, cols, rows)
+
+  // prettier-ignore
+  gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, cols + rows)
+}
+
+function updateTransform(
+  { gl, uniforms }: Context,
+  center: Vec2,
+  cellSize: number,
+  viewport: Viewport,
+): void {
   mat4.identity(transform)
 
   // flip the y axis so it matches canvas/domxy
@@ -42,16 +64,26 @@ export function drawGrid(
   )
 
   gl.uniformMatrix4fv(uniforms.transform, false, transform)
+}
 
-  bindVertexBuffer(context)
+function bindVertexBuffer({
+  gl,
+  buffers,
+  attributes,
+}: Context): void {
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertex.buffer)
+  // prettier-ignore
+  gl.vertexAttribPointer(attributes.vertex, 2, gl.FLOAT, false, 0, 0)
+  gl.enableVertexAttribArray(attributes.vertex)
+}
 
+function bindMatrixBuffer(
+  { gl, attributes, buffers }: Context,
+  cellSize: number,
+  cols: number,
+  rows: number,
+): void {
   const { matrices } = buffers.matrix
-
-  const cols = Math.ceil(viewport.size.x / cellSize) + 1
-  const rows = Math.ceil(viewport.size.y / cellSize) + 1
-
-  invariant(cols + rows <= matrices.length)
-
   let mi = 0
   for (let col = 0; col < cols; col++) {
     const matrix = matrices.at(mi++)
@@ -83,18 +115,4 @@ export function drawGrid(
     gl.vertexAttribPointer(index, 4, gl.FLOAT, false, 4 * 16, offset)
     gl.vertexAttribDivisor(index, 1)
   }
-
-  // prettier-ignore
-  gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, cols + rows)
-}
-
-function bindVertexBuffer({
-  gl,
-  buffers,
-  attributes,
-}: Context): void {
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertex.buffer)
-  // prettier-ignore
-  gl.vertexAttribPointer(attributes.vertex, 2, gl.FLOAT, false, 0, 0)
-  gl.enableVertexAttribArray(attributes.vertex)
 }
