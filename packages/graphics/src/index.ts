@@ -1,14 +1,20 @@
 import { Vec2, Viewport } from '@sim-v3/core'
+import { mat4 } from 'gl-matrix'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
-import { Context } from './context.js'
+import {
+  Attributes,
+  BufferType,
+  Context,
+  MatrixBuffer,
+  Uniforms,
+  VertexBuffer,
+} from './context.js'
 import { drawGrid } from './draw-grid.js'
 import fragSource from './frag.glsl'
 import {
-  Attributes,
   ShaderSource,
   ShaderType,
-  Uniforms,
   WebGLAttributeLocation,
 } from './types.js'
 import vertSource from './vert.glsl'
@@ -44,15 +50,64 @@ export async function initGraphics(
 
   gl.uniform4f(uniforms.color, 0, 0, 1, 1)
 
+  const buffers = initBuffers(gl)
+
   const context: Context = {
     gl,
     uniforms,
     attributes,
+    buffers,
   }
 
   return {
     clear: () => clear(gl),
     drawGrid: curry(drawGrid)(context),
+  }
+}
+
+function initVertexBuffer(
+  gl: WebGL2RenderingContext,
+): VertexBuffer {
+  // prettier-ignore
+  const data = new Float32Array([
+    0.0, 0.0,
+    0.0, 1.0,
+    1.0, 0.0,
+    1.0, 1.0,
+  ])
+  const buffer = gl.createBuffer()
+  invariant(buffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW)
+  return { type: BufferType.Vertex, buffer, data }
+}
+
+function initMatrixBuffer(
+  gl: WebGL2RenderingContext,
+): MatrixBuffer {
+  const count = 2 ** 10
+
+  const buffer = gl.createBuffer()
+  invariant(buffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+
+  const data = new Float32Array(count * 16)
+
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
+
+  const matrices = new Array<mat4>(count)
+
+  for (let i = 0; i < count; i++) {
+    matrices[i] = data.subarray(i * 16, (i + 1) * 16)
+  }
+
+  return { type: BufferType.Matrix, data, buffer, matrices }
+}
+
+function initBuffers(gl: WebGL2RenderingContext) {
+  return {
+    vertex: initVertexBuffer(gl),
+    matrix: initMatrixBuffer(gl),
   }
 }
 
