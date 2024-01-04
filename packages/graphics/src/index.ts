@@ -1,4 +1,4 @@
-import { Vec2, Viewport } from '@sim-v3/core'
+import { Camera, Viewport } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
@@ -21,11 +21,7 @@ import vertSource from './vert.glsl'
 
 export interface Graphics {
   clear(): void
-  drawGrid(
-    center: Vec2,
-    cellSize: number,
-    viewport: Viewport,
-  ): void
+  drawGrid(camera: Camera, viewport: Viewport): void
 }
 
 export async function initGraphics(
@@ -59,9 +55,10 @@ export async function initGraphics(
     buffers,
   }
 
+  // prettier-ignore
   return {
     clear: () => clear(gl),
-    drawGrid: curry(drawGrid)(context),
+    drawGrid: curry<Context, Camera, Viewport, void>(drawGrid)(context),
   }
 }
 

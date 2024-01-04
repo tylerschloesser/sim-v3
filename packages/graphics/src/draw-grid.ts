@@ -1,4 +1,10 @@
-import { Vec2, Viewport, mod } from '@sim-v3/core'
+import {
+  Camera,
+  Vec2,
+  Viewport,
+  getCellSize,
+  mod,
+} from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
 import { Context } from './context.js'
@@ -8,13 +14,19 @@ const transform: mat4 = mat4.create()
 
 export function drawGrid(
   context: Context,
-  center: Vec2,
-  cellSize: number,
+  camera: Camera,
   viewport: Viewport,
 ): void {
   const { gl, buffers } = context
 
-  updateTransform(context, center, cellSize, viewport)
+  const cellSize = getCellSize(camera)
+
+  updateTransform(
+    context,
+    camera.position,
+    cellSize,
+    viewport,
+  )
 
   bindVertexBuffer(context)
 
