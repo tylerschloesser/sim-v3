@@ -33,7 +33,7 @@ export async function initContext(
       initViewport(container, canvas, signal),
       initGraphics(canvas),
     ])
-  const game = initGame(world, camera, graphics)
+  const game = initGame(world, camera, graphics, viewport)
 
   const context: IContext = {
     container,
