@@ -27,6 +27,7 @@ export function mod(n: number, m: number): number {
   return ((n % m) + m) % m
 }
 
+// eslint-disable-next-line no-unused-vars
 export function getCellSize(camera: Camera): number {
   return 100
 }
