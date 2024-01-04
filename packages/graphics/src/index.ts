@@ -1,4 +1,4 @@
-import { Camera, Viewport } from '@sim-v3/core'
+import { Camera, InitFn, Viewport } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
@@ -18,15 +18,19 @@ import {
   WebGLAttributeLocation,
 } from './types.js'
 import vertSource from './vert.glsl'
+import { initViewport } from './viewport.js'
 
 export interface Graphics {
   clear(): void
-  drawGrid(camera: Camera, viewport: Viewport): void
+  drawGrid(camera: Camera): void
 }
 
-export async function initGraphics(
-  canvas: HTMLCanvasElement,
-): Promise<Graphics> {
+export const initGraphics: InitFn<Graphics> = async (
+  args,
+) => {
+  const viewport = await initViewport(args)
+
+  const { canvas } = args
   const gl = canvas.getContext('webgl2')
   invariant(gl)
 
@@ -49,6 +53,7 @@ export async function initGraphics(
   const buffers = initBuffers(gl)
 
   const context: Context = {
+    viewport,
     gl,
     uniforms,
     attributes,

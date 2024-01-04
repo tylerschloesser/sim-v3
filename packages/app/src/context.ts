@@ -1,9 +1,8 @@
-import { initCamera } from '@sim-v3/core'
+import { InitFn, initCamera } from '@sim-v3/core'
 import { initGame } from '@sim-v3/game'
 import { initGraphics } from '@sim-v3/graphics'
 import { initWorld } from '@sim-v3/world'
 import { createContext } from 'react'
-import { initViewport } from './viewport.js'
 
 type RenderFn = () => void
 
@@ -20,21 +19,17 @@ export enum AbortReason {
   EffectCleanup = 'effect-cleanup',
 }
 
-export async function initContext(
-  worldId: string,
-  container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
-  { signal }: AbortController,
-): Promise<IContext> {
-  const [world, camera, viewport, graphics] =
-    await Promise.all([
-      initWorld(worldId),
-      initCamera(),
-      initViewport(container, canvas, signal),
-      initGraphics(canvas),
-    ])
-  const game = initGame(world, camera, graphics, viewport)
+export const initContext: InitFn<IContext> = async (
+  args,
+) => {
+  const [world, camera, graphics] = await Promise.all([
+    initWorld(args),
+    initCamera(args),
+    initGraphics(args),
+  ])
+  const game = initGame(world, camera, graphics)
 
+  const { container, canvas, signal } = args
   const context: IContext = {
     container,
     canvas,

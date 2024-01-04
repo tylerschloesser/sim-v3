@@ -1,15 +1,13 @@
-import { Viewport } from '@sim-v3/core'
+import { InitFn, Viewport } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
-export async function initViewport(
-  container: HTMLDivElement,
-  canvas: HTMLCanvasElement,
-  signal: AbortSignal,
-): Promise<Viewport> {
+export const initViewport: InitFn<Viewport> = async (
+  args,
+) => {
+  const { container, canvas, signal } = args
   const viewport: Viewport = {
     size: { x: 0, y: 0 },
   }
-
   initResizeObserver(container, canvas, signal, viewport)
   initDevicePixelRatioListener(canvas, signal, viewport)
 

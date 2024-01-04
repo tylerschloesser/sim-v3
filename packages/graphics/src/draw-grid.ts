@@ -15,9 +15,8 @@ const transform: mat4 = mat4.create()
 export function drawGrid(
   context: Context,
   camera: Camera,
-  viewport: Viewport,
 ): void {
-  const { gl, buffers } = context
+  const { gl, buffers, viewport } = context
 
   const cellSize = getCellSize(camera)
 

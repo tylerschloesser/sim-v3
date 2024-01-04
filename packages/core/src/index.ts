@@ -12,7 +12,7 @@ export interface Camera {
   zoom: number
 }
 
-export async function initCamera(): Promise<Camera> {
+export const initCamera: InitFn<Camera> = async () => {
   const position: Vec2 = { x: 0, y: 0 }
   const zoom: number = 0.5
   return { position, zoom }
@@ -30,3 +30,12 @@ export function mod(n: number, m: number): number {
 export function getCellSize(camera: Camera): number {
   return 100
 }
+
+export interface InitArgs {
+  worldId: string
+  container: HTMLDivElement
+  canvas: HTMLCanvasElement
+  signal: AbortSignal
+}
+
+export type InitFn<T> = (args: InitArgs) => Promise<T>

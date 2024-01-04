@@ -1,3 +1,4 @@
+import { Viewport } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import { WebGLAttributeLocation } from './types.js'
 
@@ -36,6 +37,7 @@ export interface Buffers {
 }
 
 export interface Context {
+  viewport: Viewport
   gl: WebGL2RenderingContext
   uniforms: Uniforms
   attributes: Attributes

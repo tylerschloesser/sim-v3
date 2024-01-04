@@ -1,3 +1,4 @@
+import { InitFn } from '@sim-v3/core'
 import * as z from 'zod'
 
 export const world = z.strictObject({
@@ -5,9 +6,9 @@ export const world = z.strictObject({
 })
 export type World = z.infer<typeof world>
 
-export async function initWorld(
-  id: string,
-): Promise<World> {
+export const initWorld: InitFn<World> = async ({
+  worldId: id,
+}) => {
   let world = await loadWorld(id)
   if (!world) {
     world = { id }

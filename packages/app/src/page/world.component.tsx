@@ -32,12 +32,12 @@ export function WorldPage() {
       console.log('abort reason:', controller.signal.reason)
     })
 
-    initContext(
+    initContext({
       worldId,
-      container.current,
-      canvas.current,
-      controller,
-    ).then(setContext)
+      container: container.current,
+      canvas: canvas.current,
+      signal: controller.signal,
+    }).then(setContext)
 
     return () => {
       controller.abort(AbortReason.EffectCleanup)

@@ -6,12 +6,11 @@ export function initGame(
   world: World,
   camera: Camera,
   graphics: Graphics,
-  viewport: Viewport,
 ) {
   return {
     render() {
       graphics.clear()
-      graphics.drawGrid(camera, viewport)
+      graphics.drawGrid(camera)
     },
   }
 }
