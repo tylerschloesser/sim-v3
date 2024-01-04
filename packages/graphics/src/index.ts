@@ -4,7 +4,6 @@ import invariant from 'tiny-invariant'
 import fragSource from './frag.glsl'
 import {
   Attributes,
-  Graphics,
   ShaderSource,
   ShaderType,
   Uniforms,
@@ -12,7 +11,10 @@ import {
 } from './types.js'
 import vertSource from './vert.glsl'
 
-export { Graphics } from './types.js'
+export interface Graphics {
+  clear(): void
+  drawGrid(center: Vec2, cellSize: number): void
+}
 
 export async function initGraphics(
   canvas: HTMLCanvasElement,
