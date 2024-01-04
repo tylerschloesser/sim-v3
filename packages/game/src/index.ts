@@ -10,6 +10,7 @@ export function initGame(
   return {
     render() {
       graphics.clear()
+      graphics.drawGrid(camera.position, 20)
     },
   }
 }
