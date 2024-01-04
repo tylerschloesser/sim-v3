@@ -1,14 +1,17 @@
-import { Viewport } from '@sim-v3/core'
-import { mat4, vec2 } from 'gl-matrix'
+import { Vec2, Viewport, mod } from '@sim-v3/core'
+import { mat4 } from 'gl-matrix'
+import { Attributes, Uniforms } from './types.js'
 import { mat4Scale, mat4Translate } from './util.js'
 
 const transform: mat4 = mat4.create()
 
 export function drawGrid(
   gl: WebGL2RenderingContext,
-  center: vec2,
+  center: Vec2,
   cellSize: number,
   viewport: Viewport,
+  uniforms: Uniforms,
+  attributes: Attributes,
 ): void {
   mat4.identity(transform)
 
@@ -29,4 +32,14 @@ export function drawGrid(
 
   // TODO document this
   mat4Translate(transform, -0.5)
+
+  // TODO document this
+  // prettier-ignore
+  mat4Translate(
+    transform,
+    (mod(viewport.size.x / 2 / cellSize - center.x, 1) - 1) * cellSize,
+    (mod(viewport.size.y / 2 / cellSize - center.y, 1) - 1) * cellSize,
+  )
+
+  gl.uniformMatrix4fv(uniforms.transform, false, transform)
 }
