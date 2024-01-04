@@ -21,3 +21,8 @@ export async function initCamera(): Promise<Camera> {
 export interface Viewport {
   size: Vec2
 }
+
+// https://stackoverflow.com/a/17323608
+export function mod(n: number, m: number): number {
+  return ((n % m) + m) % m
+}
