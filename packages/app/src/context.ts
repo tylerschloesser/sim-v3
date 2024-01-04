@@ -38,12 +38,12 @@ export const initContext: InitFn<IContext> = async (
     signal,
   }
 
-  initRenderLoop(context)
+  startRenderLoop(context)
 
   return context
 }
 
-function initRenderLoop(context: IContext) {
+function startRenderLoop(context: IContext) {
   const { signal } = context
   function handleFrame() {
     if (signal.aborted) {
