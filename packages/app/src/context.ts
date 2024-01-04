@@ -39,6 +39,7 @@ export async function initContext(
   }
 
   initResizeObserver(context)
+  initDevicePixelRatioListener(context)
   initRenderLoop(context)
 
   return context
@@ -63,13 +64,37 @@ function initResizeObserver(context: IContext): void {
     const entry = entries.at(0)
     invariant(entry)
     const { contentRect: rect } = entry
-
-    canvas.width = rect.width
-    canvas.height = rect.height
+    const devicePixelRatio = getDevicePixelRatio()
+    canvas.width = rect.width * devicePixelRatio
+    canvas.height = rect.height * devicePixelRatio
   })
   observer.observe(container)
 
   signal.addEventListener('abort', () => {
     observer.disconnect()
   })
+}
+
+function initDevicePixelRatioListener(
+  context: IContext,
+): void {
+  const { canvas, signal } = context
+  function updateListener() {
+    const query = `(resolution: ${getDevicePixelRatio()}dppx)`
+    const media = matchMedia(query)
+    function listener() {
+      const rect = canvas.getBoundingClientRect()
+      const devicePixelRatio = getDevicePixelRatio()
+      canvas.width = rect.width * devicePixelRatio
+      canvas.height = rect.height * devicePixelRatio
+      media.removeEventListener('change', listener)
+      updateListener()
+    }
+    media.addEventListener('change', listener, { signal })
+  }
+  updateListener()
+}
+
+function getDevicePixelRatio() {
+  return self.devicePixelRatio
 }
