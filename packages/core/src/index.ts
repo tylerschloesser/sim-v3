@@ -17,3 +17,7 @@ export async function initCamera(): Promise<Camera> {
   const zoom: number = 0.5
   return { position, zoom }
 }
+
+export interface Viewport {
+  size: Vec2
+}
