@@ -1,6 +1,8 @@
 import { Vec2 } from '@sim-v3/core'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
+import fragSource from './frag.glsl'
+import vertSource from './vert.glsl'
 
 export interface Graphics {
   clear(): void
@@ -13,10 +15,41 @@ export async function initGraphics(
   const gl = canvas.getContext('webgl2')
   invariant(gl)
 
+  const program = gl.createProgram()
+  invariant(program)
+
+  gl.attachShader(
+    program,
+    initShader(gl, gl.VERTEX_SHADER, vertSource),
+  )
+  gl.attachShader(
+    program,
+    initShader(gl, gl.FRAGMENT_SHADER, fragSource),
+  )
+
   return {
     clear: () => clear(gl),
     drawGrid: curry(drawGrid)(gl),
   }
+}
+
+type ShaderType = number
+type ShaderSource = string
+
+function initShader(
+  gl: WebGL2RenderingContext,
+  type: ShaderType,
+  source: ShaderSource,
+): WebGLShader {
+  const shader = gl.createShader(type)
+  invariant(shader)
+  gl.shaderSource(shader, source)
+  gl.compileShader(shader)
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    // prettier-ignore
+    invariant(false, `Error compiling shader: ${gl.getShaderInfoLog(shader)}`)
+  }
+  return shader
 }
 
 function clear(gl: WebGL2RenderingContext): void {
