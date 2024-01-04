@@ -2,5 +2,8 @@
   "name": "@sim-v3/graphics",
   "version": "1.0.0",
   "type": "module",
-  "exports": "./src/index.ts"
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  }
 }
