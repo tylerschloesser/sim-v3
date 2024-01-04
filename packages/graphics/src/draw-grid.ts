@@ -7,11 +7,12 @@ import { mat4Scale, mat4Translate } from './util.js'
 const transform: mat4 = mat4.create()
 
 export function drawGrid(
-  { gl, uniforms, attributes, buffers }: Context,
+  context: Context,
   center: Vec2,
   cellSize: number,
   viewport: Viewport,
 ): void {
+  const { gl, uniforms, attributes, buffers } = context
   mat4.identity(transform)
 
   // flip the y axis so it matches canvas/domxy
@@ -42,10 +43,7 @@ export function drawGrid(
 
   gl.uniformMatrix4fv(uniforms.transform, false, transform)
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertex.buffer)
-  // prettier-ignore
-  gl.vertexAttribPointer(attributes.vertex, 2, gl.FLOAT, false, 0, 0)
-  gl.enableVertexAttribArray(attributes.vertex)
+  bindVertexBuffer(context)
 
   const { matrices } = buffers.matrix
 
@@ -88,4 +86,15 @@ export function drawGrid(
 
   // prettier-ignore
   gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, cols + rows)
+}
+
+function bindVertexBuffer({
+  gl,
+  buffers,
+  attributes,
+}: Context): void {
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertex.buffer)
+  // prettier-ignore
+  gl.vertexAttribPointer(attributes.vertex, 2, gl.FLOAT, false, 0, 0)
+  gl.enableVertexAttribArray(attributes.vertex)
 }
