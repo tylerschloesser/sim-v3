@@ -24,7 +24,7 @@ export function handleWheel(
   const ry = ev.offsetY - vy / 2
 
   const prevCellSize = zoomToCellSize(prevZoom, vx, vy)
-  const nextCellSize = zoomToCellSize(prevZoom, vx, vy)
+  const nextCellSize = zoomToCellSize(nextZoom, vx, vy)
 
   const dx = rx / prevCellSize - rx / nextCellSize
   const dy = ry / prevCellSize - ry / nextCellSize
