@@ -36,7 +36,6 @@ export function initViewport(
     for (const listener of listeners) {
       listener(viewport)
     }
-    // gl.viewport(0, 0, canvas.width, canvas.height)
   }
 
   // TODO this is not really necessary because the resize
