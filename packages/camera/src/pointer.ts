@@ -1,6 +1,4 @@
 import {
-  Camera,
-  Viewport,
   cellSizeToZoom,
   clampCellSize,
   dist,
@@ -9,18 +7,16 @@ import {
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
 import { Context } from './context.js'
-import { CameraMomentum } from './momentum.js'
 
 type PointerId = number
 const pointerCache = new Map<PointerId, PointerEvent>()
-
-const momentum = new CameraMomentum(100)
 
 export const handlePointer = curry<
   Context,
   PointerEvent,
   void
->(({ camera, viewport }: Context, ev: PointerEvent) => {
+>((context: Context, ev: PointerEvent) => {
+  const { camera, viewport, momentum } = context
   switch (ev.type) {
     case 'pointerup':
     case 'pointerout':
@@ -48,19 +44,13 @@ export const handlePointer = curry<
       }
       switch (pointerCache.size) {
         case 1: {
-          handleOneFingerDrag(camera, viewport, prev, ev)
+          handleOneFingerDrag(context, prev, ev)
           break
         }
         case 2: {
           const other = getLastEventForOtherPointer(ev)
           invariant(other.buttons)
-          handleTwoFingerDrag(
-            camera,
-            viewport,
-            prev,
-            ev,
-            other,
-          )
+          handleTwoFingerDrag(context, prev, ev, other)
           break
         }
       }
@@ -70,11 +60,11 @@ export const handlePointer = curry<
 })
 
 function handleOneFingerDrag(
-  camera: Camera,
-  viewport: Viewport,
+  context: Context,
   prev: PointerEvent,
   next: PointerEvent,
 ): void {
+  const { camera, viewport, momentum } = context
   const cellSize = zoomToCellSize(
     camera.zoom,
     viewport.size.x,
@@ -91,12 +81,12 @@ function handleOneFingerDrag(
 }
 
 function handleTwoFingerDrag(
-  camera: Camera,
-  viewport: Viewport,
+  context: Context,
   prev: PointerEvent,
   next: PointerEvent,
   other: PointerEvent,
 ): void {
+  const { camera, viewport } = context
   const ox = other.offsetX
   const oy = other.offsetY
   const px = prev.offsetX

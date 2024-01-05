@@ -1,5 +1,6 @@
 import { Camera, InitFn, Vec2 } from '@sim-v3/core'
 import { Context } from './context.js'
+import { CameraMomentum } from './momentum.js'
 import { handlePointer } from './pointer.js'
 import { handleWheel } from './wheel.js'
 
@@ -11,7 +12,13 @@ export const initCamera: InitFn<Camera> = async ({
   const zoom: number = 0.5
   const camera: Camera = { position, zoom }
   const { canvas } = viewport
-  const context: Context = { camera, viewport, signal }
+  const momentum = new CameraMomentum(100)
+  const context: Context = {
+    camera,
+    viewport,
+    signal,
+    momentum,
+  }
   const options: AddEventListenerOptions = { signal }
 
   // prettier-ignore
