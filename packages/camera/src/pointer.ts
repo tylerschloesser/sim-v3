@@ -16,23 +16,14 @@ export const handlePointer = curry<
   PointerEvent,
   void
 >((context: Context, ev: PointerEvent) => {
-  const { camera, viewport, momentum } = context
+  const { momentum } = context
   switch (ev.type) {
     case 'pointerup':
     case 'pointerout':
     case 'pointerleave':
     case 'pointercancel': {
       pointerCache.delete(ev.pointerId)
-
-      const cellSize = zoomToCellSize(
-        camera.zoom,
-        viewport.size.x,
-        viewport.size.y,
-      )
-
-      momentum.start(camera, cellSize, 100)
-      momentum.clear()
-
+      momentum.start(100)
       break
     }
     case 'pointerdown':

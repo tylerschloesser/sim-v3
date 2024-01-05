@@ -12,7 +12,12 @@ export const initCamera: InitFn<Camera> = async ({
   const zoom: number = 0.5
   const camera: Camera = { position, zoom }
   const { canvas } = viewport
-  const momentum = new CameraMomentum(100)
+  const momentum = new CameraMomentum(
+    100,
+    camera,
+    viewport,
+    signal,
+  )
   const context: Context = {
     camera,
     viewport,

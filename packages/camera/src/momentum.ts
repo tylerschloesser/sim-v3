@@ -1,4 +1,9 @@
-import { Camera, Vec2 } from '@sim-v3/core'
+import {
+  Camera,
+  Vec2,
+  Viewport,
+  zoomToCellSize,
+} from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 export class CameraMomentum {
@@ -11,11 +16,22 @@ export class CameraMomentum {
     t0: number
     t1: number
   }[]
+  camera: Camera
+  viewport: Viewport
+  signal: AbortSignal
 
-  constructor(size: number) {
+  constructor(
+    size: number,
+    camera: Camera,
+    viewport: Viewport,
+    signal: AbortSignal,
+  ) {
     this.queue = new Array(size)
       .fill(null)
       .map(() => ({ dx: 0, dy: 0, t0: 0, t1: 0 }))
+    this.camera = camera
+    this.viewport = viewport
+    this.signal = signal
   }
 
   push(
@@ -36,11 +52,7 @@ export class CameraMomentum {
     val.t1 = t1
   }
 
-  start(
-    camera: Camera,
-    cellSize: number,
-    window: number,
-  ): void {
+  start(window: number): void {
     this.velocity.x = 0
     this.velocity.y = 0
 
@@ -63,6 +75,8 @@ export class CameraMomentum {
       }
     }
 
+    this.clear()
+
     if (dt === 0 || (dx === 0 && dy === 0)) {
       return
     }
@@ -73,7 +87,20 @@ export class CameraMomentum {
     self.requestAnimationFrame(this.update.bind(this))
   }
 
-  update(time: number) {}
+  update(time: number) {
+    if (this.signal.aborted) return
+    if (this.velocity.x === 0 && this.velocity.y === 0) {
+      return
+    }
+
+    const cellSize = zoomToCellSize(
+      this.camera.zoom,
+      this.viewport.size.x,
+      this.viewport.size.y,
+    )
+
+    self.requestAnimationFrame(this.update.bind(this))
+  }
 
   clear(): void {
     this.i = this.len = 0
