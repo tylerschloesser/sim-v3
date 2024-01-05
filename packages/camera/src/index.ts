@@ -24,7 +24,10 @@ export const initCamera: InitFn<Camera> = async ({
     signal,
     momentum,
   }
-  const options: AddEventListenerOptions = { signal }
+  const options: AddEventListenerOptions = {
+    signal,
+    passive: true,
+  }
 
   // prettier-ignore
   {

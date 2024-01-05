@@ -38,6 +38,8 @@ export class CameraMomentum {
     t0: number,
     t1: number,
   ): void {
+    invariant(t0 <= t1)
+
     this.startTime = null
     this.i = (this.i + 1) % this.queue.length
     this.len = Math.min(this.len + 1, this.queue.length)
