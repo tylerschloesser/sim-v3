@@ -18,3 +18,5 @@ export function initGame(
     },
   }
 }
+
+export { routes } from './routes.js'

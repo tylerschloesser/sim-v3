@@ -1,3 +1,4 @@
+import { routes } from '@sim-v3/game'
 import { createRoot } from 'react-dom/client'
 import {
   RouterProvider,
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: 'world/:id',
     Component: WorldPage,
+    children: routes,
   },
 ])
 
