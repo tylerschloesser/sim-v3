@@ -11,16 +11,24 @@ export function initViewport(
 ): Viewport {
   const viewport: Viewport = {
     size: { x: 0, y: 0 },
+    pixelRatio: 0,
   }
 
   const updateViewport: UpdateViewportFn = (rect) => {
-    const devicePixelRatio = getDevicePixelRatio()
-    const width = rect.width * devicePixelRatio
-    const height = rect.height * devicePixelRatio
-    viewport.size.x = canvas.width = width
-    viewport.size.y = canvas.height = height
-    gl.viewport(0, 0, width, height)
+    viewport.pixelRatio = getPixelRatio()
+    viewport.size.x = rect.width
+    viewport.size.y = rect.height
+
+    canvas.width = viewport.size.x * viewport.pixelRatio
+    canvas.height = viewport.size.y * viewport.pixelRatio
+    gl.viewport(0, 0, canvas.width, canvas.height)
   }
+
+  // TODO this is not really necessary because the resize
+  // observer will also update the viewport, but this ensures
+  // that it's impossible for the initial viewport to be 0.
+  //
+  updateViewport(canvas.getBoundingClientRect())
 
   initResizeObserver(container, signal, updateViewport)
   initDevicePixelRatioListener(
@@ -56,7 +64,7 @@ function initDevicePixelRatioListener(
   updateViewport: UpdateViewportFn,
 ): void {
   function updateListener() {
-    const query = `(resolution: ${getDevicePixelRatio()}dppx)`
+    const query = `(resolution: ${getPixelRatio()}dppx)`
     const media = matchMedia(query)
     function listener() {
       updateViewport(canvas.getBoundingClientRect())
@@ -68,6 +76,6 @@ function initDevicePixelRatioListener(
   updateListener()
 }
 
-function getDevicePixelRatio() {
+function getPixelRatio() {
   return self.devicePixelRatio
 }

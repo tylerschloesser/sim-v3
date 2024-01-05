@@ -19,6 +19,7 @@ export function getCellSize(camera: Camera): number {
 
 export interface Viewport {
   size: Vec2
+  pixelRatio: number
 }
 
 // https://stackoverflow.com/a/17323608
