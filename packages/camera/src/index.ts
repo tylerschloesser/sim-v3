@@ -1,5 +1,6 @@
 import { Camera, InitFn, Vec2 } from '@sim-v3/core'
 import { handlePointer } from './pointer.js'
+import { handleWheel } from './wheel.js'
 
 export const initCamera: InitFn<Camera> = async ({
   canvas,
@@ -17,6 +18,8 @@ export const initCamera: InitFn<Camera> = async ({
     canvas.addEventListener('pointerleave', (ev) => { handlePointer(camera, ev) }, { signal })
     canvas.addEventListener('pointercancel', (ev) => { handlePointer(camera, ev) }, { signal })
     canvas.addEventListener('pointermove', (ev) => { handlePointer(camera, ev) }, { signal })
+
+    canvas.addEventListener('wheel', (ev) => { handleWheel(camera, ev) })
   }
 
   return camera
