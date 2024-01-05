@@ -13,11 +13,11 @@ invariant(container)
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    index: true,
     Component: RootPage,
   },
   {
-    path: '/world/:id',
+    path: 'world/:id',
     Component: WorldPage,
   },
 ])

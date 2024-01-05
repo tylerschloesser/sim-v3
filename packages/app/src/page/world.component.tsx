@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import invariant from 'tiny-invariant'
 import {
   AbortReason,
@@ -58,9 +58,9 @@ export function WorldPage() {
         ></canvas>
       </div>
       {context && (
-        <Context.Provider
-          value={context}
-        ></Context.Provider>
+        <Context.Provider value={context}>
+          <Outlet />
+        </Context.Provider>
       )}
     </>
   )
