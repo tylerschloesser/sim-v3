@@ -1,4 +1,9 @@
-import { Camera, InitFn, Vec2 } from '@sim-v3/core'
+import {
+  Camera,
+  InitFn,
+  Vec2,
+  getCellSize,
+} from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 type PointerId = number
@@ -44,12 +49,13 @@ function handleOneFingerDrag(
   prev: PointerEvent,
   next: PointerEvent,
 ): void {
-  console.log(
-    'TODO handleOneFingerDrag',
-    camera,
-    prev,
-    next,
-  )
+  const dx = next.offsetX - prev.offsetX
+  const dy = next.offsetY - prev.offsetY
+
+  const cellSize = getCellSize(camera)
+
+  camera.position.x += -dx / cellSize
+  camera.position.y += -dy / cellSize
 }
 
 function handleTwoFingerDrag(
