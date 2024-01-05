@@ -23,7 +23,7 @@ export const handlePointer = curry<
     case 'pointerleave':
     case 'pointercancel': {
       pointerCache.delete(ev.pointerId)
-      momentum.start(100)
+      momentum.start(100, ev.timeStamp)
       break
     }
     case 'pointerdown':
