@@ -99,10 +99,11 @@ export class CameraTaper {
     this.startTime = time
   }
 
-  update = (time: number) => {
+  update = () => {
     if (this.signal.aborted) {
       return
     }
+    const now = self.performance.now()
 
     self.requestAnimationFrame(this.update)
 
@@ -113,7 +114,7 @@ export class CameraTaper {
       return
     }
 
-    let dt = Math.min(time - startTime, duration)
+    let dt = Math.min(now - startTime, duration)
     dt = smooth(dt / duration) * duration
 
     const dx = vx * dt + 0.5 * ax * dt ** 2
@@ -122,7 +123,7 @@ export class CameraTaper {
     this.camera.position.x = sx + dx
     this.camera.position.y = sy + dy
 
-    if (time - startTime >= duration) {
+    if (now - startTime >= duration) {
       this.startTime = null
     }
   }
