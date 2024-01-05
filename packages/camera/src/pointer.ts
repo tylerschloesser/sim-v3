@@ -3,6 +3,7 @@ import {
   Viewport,
   cellSizeToZoom,
   clampCellSize,
+  dist,
   zoomToCellSize,
 } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
@@ -25,11 +26,18 @@ export function handlePointer(
     case 'pointercancel': {
       pointerCache.delete(ev.pointerId)
 
-      console.log(momentum.velocity(100))
+      const cellSize = zoomToCellSize(
+        camera.zoom,
+        viewport.size.x,
+        viewport.size.y,
+      )
+
+      momentum.start(camera, cellSize, 100)
       momentum.clear()
 
       break
     }
+    case 'pointerdown':
     case 'pointermove': {
       const prev = pointerCache.get(ev.pointerId)
       pointerCache.set(ev.pointerId, ev)
@@ -141,13 +149,4 @@ function getLastEventForOtherPointer(
     }
   }
   invariant(false)
-}
-
-function dist(
-  ax: number,
-  ay: number,
-  bx: number,
-  by: number,
-): number {
-  return Math.sqrt((ax - bx) ** 2 + (ay - by) ** 2)
 }
