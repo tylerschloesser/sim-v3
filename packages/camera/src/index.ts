@@ -1,7 +1,7 @@
 import { Camera, InitFn, Vec2 } from '@sim-v3/core'
 import { Context } from './context.js'
-import { CameraMomentum } from './momentum.js'
 import { handlePointer } from './pointer.js'
+import { CameraTaper } from './taper.js'
 import { handleWheel } from './wheel.js'
 
 export const initCamera: InitFn<Camera> = async ({
@@ -12,7 +12,7 @@ export const initCamera: InitFn<Camera> = async ({
   const zoom: number = 0.5
   const camera: Camera = { position, zoom }
   const { canvas } = viewport
-  const momentum = new CameraMomentum(
+  const taper = new CameraTaper(
     100,
     camera,
     viewport,
@@ -22,7 +22,7 @@ export const initCamera: InitFn<Camera> = async ({
     camera,
     viewport,
     signal,
-    momentum,
+    taper,
   }
   const options: AddEventListenerOptions = {
     signal,

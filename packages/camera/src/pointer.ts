@@ -16,11 +16,11 @@ export const handlePointer = curry<
   PointerEvent,
   void
 >((context: Context, ev: PointerEvent) => {
-  const { momentum } = context
+  const { taper } = context
   switch (ev.type) {
     case 'pointerup': {
       pointerCache.delete(ev.pointerId)
-      momentum.start(100, ev.timeStamp)
+      taper.start(100, ev.timeStamp)
       break
     }
     case 'pointerout':
@@ -58,7 +58,7 @@ function handleOneFingerDrag(
   prev: PointerEvent,
   next: PointerEvent,
 ): void {
-  const { camera, viewport, momentum } = context
+  const { camera, viewport, taper } = context
   const cellSize = zoomToCellSize(
     camera.zoom,
     viewport.size.x,
@@ -71,7 +71,7 @@ function handleOneFingerDrag(
   camera.position.x += dx
   camera.position.y += dy
 
-  momentum.record(dx, dy, prev.timeStamp, next.timeStamp)
+  taper.record(dx, dy, prev.timeStamp, next.timeStamp)
 }
 
 function handleTwoFingerDrag(

@@ -1,7 +1,7 @@
 import { Camera, Viewport } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
-export class CameraMomentum {
+export class CameraTaper {
   i: number = 0
   len: number = 0
 
