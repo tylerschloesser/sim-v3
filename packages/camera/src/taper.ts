@@ -97,6 +97,17 @@ export class CameraTaper {
     this.ax = -this.vx / this.duration
     this.ay = -this.vy / this.duration
     this.startTime = time
+
+    console.debug(
+      `starting camera taper with ${[
+        `sx=${this.sx.toFixed(1)}`,
+        `sy=${this.sy.toFixed(1)}`,
+        `vx=${(this.vx * 1e3).toFixed(0)}e-3`,
+        `vy=${(this.vy * 1e3).toFixed(0)}e-3`,
+        `ax=${(this.ax * 1e6).toFixed(0)}e-6`,
+        `ay=${(this.ay * 1e6).toFixed(0)}e-6`,
+      ].join(', ')}`,
+    )
   }
 
   update = () => {
