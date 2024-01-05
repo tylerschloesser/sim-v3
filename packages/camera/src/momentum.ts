@@ -1,10 +1,17 @@
-import { Camera, Vec2, Viewport } from '@sim-v3/core'
+import { Camera, Viewport } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 export class CameraMomentum {
   i: number = 0
   len: number = 0
-  velocity: Vec2 = { x: 0, y: 0 }
+
+  sx: number = 0
+  sy: number = 0
+  vx: number = 0
+  vy: number = 0
+  ax: number = 0
+  ay: number = 0
+
   startTime: number | null = null
   duration: number = 1000
   queue: {
@@ -80,15 +87,13 @@ export class CameraMomentum {
       return
     }
 
-    this.velocity.x = dx / dt
-    this.velocity.y = dy / dt
+    this.sx = this.camera.position.x
+    this.sy = this.camera.position.y
+    this.vx = dx / dt
+    this.vy = dy / dt
+    this.ax = -this.vx / this.duration
+    this.ay = -this.vy / this.duration
     this.startTime = time
-
-    console.log(
-      this.velocity.x,
-      this.velocity.y,
-      this.startTime,
-    )
   }
 
   update = (time: number) => {
@@ -98,28 +103,24 @@ export class CameraMomentum {
 
     self.requestAnimationFrame(this.update)
 
-    if (this.startTime === null) {
+    const { sx, sy, vx, vy, ax, ay } = this
+    const { startTime, duration } = this
+
+    if (startTime === null) {
       return
     }
-    invariant(
-      this.velocity.x !== 0 || this.velocity.y !== 0,
-    )
 
-    let dt = Math.min(time - this.startTime, this.duration)
-    dt = smooth(dt / this.duration) * this.duration
+    let dt = Math.min(time - startTime, duration)
+    dt = smooth(dt / duration) * duration
 
-    const vx = this.velocity.x
-    const vy = this.velocity.y
+    const dx = vx * dt + 0.5 * ax * dt ** 2
+    const dy = vy * dt + 0.5 * ay * dt ** 2
 
-    const ax = -vx / this.duration
-    const ay = -vy / this.duration
+    this.camera.position.x = sx + dx
+    this.camera.position.y = sy + dy
 
-    this.camera.position.x += vx * dt + 0.5 * ax * dt ** 2
-    this.camera.position.y += vy * dt + 0.5 * ay * dt ** 2
-
-    if (time - this.startTime >= this.duration) {
+    if (time - startTime >= duration) {
       this.startTime = null
-      console.debug('end momentum')
     }
   }
 
