@@ -1,8 +1,9 @@
-import { Camera } from '@sim-v3/core'
+import { Camera, Viewport } from '@sim-v3/core'
 
 export function handleWheel(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   camera: Camera,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  viewport: Viewport,
   ev: WheelEvent,
-): void {}
+): void {
+  const pz = camera.zoom
+}

@@ -11,16 +11,57 @@ export const initCamera: InitFn<Camera> = async ({
   const camera: Camera = { position, zoom }
   const { canvas } = viewport
 
-  // prettier-ignore
   {
-    canvas.addEventListener('pointerup', (ev) => { handlePointer(camera, ev) }, { signal })
-    canvas.addEventListener('pointerdown', (ev) => { handlePointer(camera, ev) }, { signal })
-    canvas.addEventListener('pointerenter', (ev) => { handlePointer(camera, ev) }, { signal })
-    canvas.addEventListener('pointerleave', (ev) => { handlePointer(camera, ev) }, { signal })
-    canvas.addEventListener('pointercancel', (ev) => { handlePointer(camera, ev) }, { signal })
-    canvas.addEventListener('pointermove', (ev) => { handlePointer(camera, ev) }, { signal })
+    canvas.addEventListener(
+      'pointerup',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
+    canvas.addEventListener(
+      'pointerdown',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
+    canvas.addEventListener(
+      'pointerenter',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
+    canvas.addEventListener(
+      'pointerleave',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
+    canvas.addEventListener(
+      'pointercancel',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
+    canvas.addEventListener(
+      'pointermove',
+      (ev) => {
+        handlePointer(camera, viewport, ev)
+      },
+      { signal },
+    )
 
-    canvas.addEventListener('wheel', (ev) => { handleWheel(camera, ev) })
+    canvas.addEventListener(
+      'wheel',
+      (ev) => {
+        handleWheel(camera, viewport, ev)
+      },
+      { signal },
+    )
   }
 
   return camera

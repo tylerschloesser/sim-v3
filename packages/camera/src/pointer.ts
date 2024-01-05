@@ -1,4 +1,4 @@
-import { Camera, getCellSize } from '@sim-v3/core'
+import { Camera, Viewport, getCellSize } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 type PointerId = number
@@ -6,6 +6,7 @@ const pointerCache = new Map<PointerId, PointerEvent>()
 
 export function handlePointer(
   camera: Camera,
+  viewport: Viewport,
   ev: PointerEvent,
 ): void {
   switch (ev.type) {
