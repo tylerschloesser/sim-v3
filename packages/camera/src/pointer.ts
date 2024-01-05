@@ -16,11 +16,10 @@ export const handlePointer = curry<
   PointerEvent,
   void
 >((context: Context, ev: PointerEvent) => {
-  const { taper } = context
   switch (ev.type) {
     case 'pointerup': {
       pointerCache.delete(ev.pointerId)
-      taper.start(100, ev.timeStamp)
+      context.taper.start(100, ev.timeStamp)
       break
     }
     case 'pointerout':
