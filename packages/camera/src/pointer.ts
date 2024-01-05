@@ -6,9 +6,12 @@ import {
   zoomToCellSize,
 } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
+import { CameraMomentum } from './momentum.js'
 
 type PointerId = number
 const pointerCache = new Map<PointerId, PointerEvent>()
+
+const momentum = new CameraMomentum(100)
 
 export function handlePointer(
   camera: Camera,
@@ -21,6 +24,10 @@ export function handlePointer(
     case 'pointerleave':
     case 'pointercancel': {
       pointerCache.delete(ev.pointerId)
+
+      console.log(momentum.velocity(100))
+      momentum.clear()
+
       break
     }
     case 'pointermove': {
@@ -58,17 +65,19 @@ function handleOneFingerDrag(
   prev: PointerEvent,
   next: PointerEvent,
 ): void {
-  const dx = next.offsetX - prev.offsetX
-  const dy = next.offsetY - prev.offsetY
-
   const cellSize = zoomToCellSize(
     camera.zoom,
     viewport.size.x,
     viewport.size.y,
   )
 
-  camera.position.x += -dx / cellSize
-  camera.position.y += -dy / cellSize
+  const dx = -(next.offsetX - prev.offsetX) / cellSize
+  const dy = -(next.offsetY - prev.offsetY) / cellSize
+
+  camera.position.x += dx
+  camera.position.y += dy
+
+  momentum.push(dx, dy, prev.timeStamp, next.timeStamp)
 }
 
 function handleTwoFingerDrag(
