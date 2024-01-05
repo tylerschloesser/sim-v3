@@ -13,24 +13,58 @@ export interface Camera {
   zoom: number
 }
 
-export const MIN_TILE_SIZE_FACTOR = 1 / 256
-export const MAX_TILE_SIZE_FACTOR = 1 / 8
+export const MIN_CELL_SIZE_FACTOR = 1 / 256
+export const MAX_CELL_SIZE_FACTOR = 1 / 8
 
 export const MIN_ZOOM = 0
 export const MAX_ZOOM = 1
+
+export function clamp(
+  v: number,
+  min: number,
+  max: number,
+): number {
+  return Math.min(max, Math.max(v, min))
+}
 
 export function zoomToCellSize(
   zoom: number,
   vx: number,
   vy: number,
 ): number {
-  const minTileSize =
-    Math.min(vx, vy) * MIN_TILE_SIZE_FACTOR
-  const maxTileSize =
-    Math.min(vx, vy) * MAX_TILE_SIZE_FACTOR
+  const minCellSize =
+    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
+  const maxCellSize =
+    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
   invariant(zoom >= MIN_ZOOM)
   invariant(zoom <= MAX_ZOOM)
-  return minTileSize + (maxTileSize - minTileSize) * zoom
+  return minCellSize + (maxCellSize - minCellSize) * zoom
+}
+
+export function clampCellSize(
+  cellSize: number,
+  vx: number,
+  vy: number,
+) {
+  const minCellSize =
+    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
+  const maxCellSize =
+    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
+  return clamp(cellSize, minCellSize, maxCellSize)
+}
+
+export function cellSizeToZoom(
+  cellSize: number,
+  vx: number,
+  vy: number,
+): number {
+  const minCellSize =
+    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
+  const maxCellSize =
+    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
+  const zoom =
+    (cellSize - minCellSize) / (maxCellSize - minCellSize)
+  return clamp(zoom, MIN_ZOOM, MAX_ZOOM)
 }
 
 type ViewportListenerFn = (viewport: Viewport) => void
