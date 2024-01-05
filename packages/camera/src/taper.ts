@@ -1,4 +1,4 @@
-import { Camera, Viewport } from '@sim-v3/core'
+import { Camera, Viewport, dist } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 export class CameraTaper {
