@@ -10,7 +10,7 @@ export function RootPage() {
       <a
         href="world"
         className={styles.link}
-        onClick={(e) => {
+        onPointerUp={(e) => {
           e.preventDefault()
           navigate('world/test')
         }}
