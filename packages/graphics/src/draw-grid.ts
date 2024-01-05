@@ -7,10 +7,25 @@ import {
 } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
+import { rgb } from './color.js'
 import { Context } from './context.js'
 import { mat4Scale, mat4Translate } from './util.js'
 
 const transform: mat4 = mat4.create()
+
+function updateColor(
+  context: Context,
+  camera: Camera,
+): void {
+  const color = rgb(0.25 * camera.zoom * 255)
+  context.gl.uniform4f(
+    context.uniforms.color,
+    color.r,
+    color.g,
+    color.b,
+    color.a,
+  )
+}
 
 export function drawGrid(
   context: Context,
@@ -18,7 +33,7 @@ export function drawGrid(
 ): void {
   const { gl, buffers, viewport } = context
 
-  gl.uniform4f(context.uniforms.color, 1, 1, 1, 1)
+  updateColor(context, camera)
 
   const cellSize = zoomToCellSize(
     camera.zoom,
