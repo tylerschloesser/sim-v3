@@ -27,6 +27,12 @@ export const initContext: InitFn<IContext> = async (
     initCamera(args),
     initGraphics(args),
   ])
+
+  overrideDefaultTouchListeners(
+    args.viewport.canvas,
+    args.signal,
+  )
+
   const game = initGame(world, camera, graphics)
 
   const { signal } = args
@@ -51,4 +57,38 @@ function startRenderLoop(context: IContext) {
     self.requestAnimationFrame(render)
   }
   self.requestAnimationFrame(render)
+}
+
+// Disable
+//
+// 1) The magniyfing glass on iOS when double tapping the canvas
+// 2) The "back" navigation by swiping from the far left side of the screen on iOS
+//
+// IMPORTANT this needs to be AFTER our event listeners are added
+//
+function overrideDefaultTouchListeners(
+  canvas: HTMLCanvasElement,
+  signal: AbortSignal,
+): void {
+  canvas.addEventListener(
+    'touchcancel',
+    (ev) => {
+      ev.preventDefault()
+    },
+    { passive: false, signal },
+  )
+  canvas.addEventListener(
+    'touchend',
+    (ev) => {
+      ev.preventDefault()
+    },
+    { passive: false, signal },
+  )
+  canvas.addEventListener(
+    'touchstart',
+    (ev) => {
+      ev.preventDefault()
+    },
+    { passive: false, signal },
+  )
 }
