@@ -11,7 +11,7 @@ export function Root() {
       <a
         className={styles.link}
         href={`${worldId}/tools`}
-        onClick={(ev) => {
+        onPointerUp={(ev) => {
           ev.preventDefault()
           navigate('tools')
         }}

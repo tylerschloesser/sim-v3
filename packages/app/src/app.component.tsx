@@ -33,15 +33,17 @@ export function App() {
 function DevToolbar() {
   const [erudaEnabled, setErudaEnabled] =
     useState<boolean>(false)
-  const erudaRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!erudaEnabled) return
     import('eruda').then(({ default: eruda }) => {
-      invariant(erudaRef.current)
-      eruda.init({ container: erudaRef.current })
-      return
+      eruda.init()
     })
+    return () => {
+      import('eruda').then(({ default: eruda }) => {
+        eruda.destroy()
+      })
+    }
   }, [erudaEnabled])
 
   return (
@@ -56,9 +58,6 @@ function DevToolbar() {
         />
         Eruda
       </label>
-      {erudaEnabled && (
-        <div data-hint="eruda" ref={erudaRef} />
-      )}
     </div>
   )
 }
