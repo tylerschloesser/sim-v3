@@ -1,3 +1,4 @@
+import invariant from 'tiny-invariant'
 import * as z from 'zod'
 
 export const vec2 = z.strictObject({
@@ -12,9 +13,24 @@ export interface Camera {
   zoom: number
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getCellSize(camera: Camera): number {
-  return 100
+export const MIN_TILE_SIZE_FACTOR = 1 / 256
+export const MAX_TILE_SIZE_FACTOR = 1 / 8
+
+export const MIN_ZOOM = 0
+export const MAX_ZOOM = 1
+
+export function zoomToCellSize(
+  zoom: number,
+  vx: number,
+  vy: number,
+): number {
+  const minTileSize =
+    Math.min(vx, vy) * MIN_TILE_SIZE_FACTOR
+  const maxTileSize =
+    Math.min(vx, vy) * MAX_TILE_SIZE_FACTOR
+  invariant(zoom >= MIN_ZOOM)
+  invariant(zoom <= MAX_ZOOM)
+  return minTileSize + (maxTileSize - minTileSize) * zoom
 }
 
 type ViewportListenerFn = (viewport: Viewport) => void

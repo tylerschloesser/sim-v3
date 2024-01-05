@@ -1,4 +1,8 @@
-import { Camera, Viewport, getCellSize } from '@sim-v3/core'
+import {
+  Camera,
+  Viewport,
+  zoomToCellSize,
+} from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
 type PointerId = number
@@ -25,13 +29,19 @@ export function handlePointer(
       }
       switch (pointerCache.size) {
         case 1: {
-          handleOneFingerDrag(camera, prev, ev)
+          handleOneFingerDrag(camera, viewport, prev, ev)
           break
         }
         case 2: {
           const other = getLastEventForOtherPointer(ev)
           invariant(other.buttons)
-          handleTwoFingerDrag(camera, prev, ev, other)
+          handleTwoFingerDrag(
+            camera,
+            viewport,
+            prev,
+            ev,
+            other,
+          )
           break
         }
       }
@@ -42,13 +52,18 @@ export function handlePointer(
 
 function handleOneFingerDrag(
   camera: Camera,
+  viewport: Viewport,
   prev: PointerEvent,
   next: PointerEvent,
 ): void {
   const dx = next.offsetX - prev.offsetX
   const dy = next.offsetY - prev.offsetY
 
-  const cellSize = getCellSize(camera)
+  const cellSize = zoomToCellSize(
+    camera.zoom,
+    viewport.size.x,
+    viewport.size.y,
+  )
 
   camera.position.x += -dx / cellSize
   camera.position.y += -dy / cellSize
@@ -56,6 +71,7 @@ function handleOneFingerDrag(
 
 function handleTwoFingerDrag(
   camera: Camera,
+  viewport: Viewport,
   prev: PointerEvent,
   next: PointerEvent,
   other: PointerEvent,
@@ -63,6 +79,7 @@ function handleTwoFingerDrag(
   console.log(
     'TODO handleTwoFingerDrag',
     camera,
+    viewport,
     prev,
     next,
     other,

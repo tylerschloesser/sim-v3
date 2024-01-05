@@ -2,8 +2,8 @@ import {
   Camera,
   Vec2,
   Viewport,
-  getCellSize,
   mod,
+  zoomToCellSize,
 } from '@sim-v3/core'
 import { mat4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
@@ -18,7 +18,11 @@ export function drawGrid(
 ): void {
   const { gl, buffers, viewport } = context
 
-  const cellSize = getCellSize(camera)
+  const cellSize = zoomToCellSize(
+    camera.zoom,
+    viewport.size.x,
+    viewport.size.y,
+  )
 
   updateTransform(
     context,
