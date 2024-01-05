@@ -32,7 +32,7 @@ export class CameraMomentum {
     self.requestAnimationFrame(this.update)
   }
 
-  push(
+  record(
     dx: number,
     dy: number,
     t0: number,

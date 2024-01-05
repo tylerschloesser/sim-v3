@@ -71,7 +71,7 @@ function handleOneFingerDrag(
   camera.position.x += dx
   camera.position.y += dy
 
-  momentum.push(dx, dy, prev.timeStamp, next.timeStamp)
+  momentum.record(dx, dy, prev.timeStamp, next.timeStamp)
 }
 
 function handleTwoFingerDrag(
