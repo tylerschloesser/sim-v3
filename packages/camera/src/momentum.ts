@@ -5,10 +5,13 @@ export class CameraMomentum {
   i: number = 0
   len: number = 0
 
+  // camera start position
   sx: number = 0
   sy: number = 0
+  // camera velocity
   vx: number = 0
   vy: number = 0
+  // camera acceleration
   ax: number = 0
   ay: number = 0
 
