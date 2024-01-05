@@ -1,9 +1,10 @@
 import { routes } from '@sim-v3/game'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom'
+import invariant from 'tiny-invariant'
 import styles from './app.module.scss'
 import { RootPage } from './page/root.component.js'
 import { WorldPage } from './page/world.component.js'
@@ -30,20 +31,34 @@ export function App() {
 }
 
 function DevToolbar() {
-  const [eruda, setEruda] = useState<boolean>(false)
+  const [erudaEnabled, setErudaEnabled] =
+    useState<boolean>(false)
+  const erudaRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!erudaEnabled) return
+    import('eruda').then(({ default: eruda }) => {
+      invariant(erudaRef.current)
+      eruda.init({ container: erudaRef.current })
+      return
+    })
+  }, [erudaEnabled])
 
   return (
     <div className={styles['dev-toolbar']}>
       <label className={styles.label}>
         <input
           type="checkbox"
-          checked={eruda}
+          checked={erudaEnabled}
           onChange={(ev) => {
-            setEruda(ev.target.checked)
+            setErudaEnabled(ev.target.checked)
           }}
         />
         Eruda
       </label>
+      {erudaEnabled && (
+        <div data-hint="eruda" ref={erudaRef} />
+      )}
     </div>
   )
 }
