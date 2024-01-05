@@ -3,7 +3,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom'
-import './index.scss'
+import styles from './app.module.scss'
 import { RootPage } from './page/root.component.js'
 import { WorldPage } from './page/world.component.js'
 
@@ -20,5 +20,9 @@ const router = createBrowserRouter([
 ])
 
 export function App() {
-  return <RouterProvider router={router} />
+  return (
+    <div className={styles.container}>
+      <RouterProvider router={router} />
+    </div>
+  )
 }

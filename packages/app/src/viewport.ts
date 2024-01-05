@@ -6,13 +6,11 @@ type UpdateViewportFn = (rect: DOMRectReadOnly) => void
 type ListenerFn = (viewport: Viewport) => void
 
 export function initViewport(
-  container: HTMLDivElement,
   canvas: HTMLCanvasElement,
   signal: AbortSignal,
 ): Viewport {
   const listeners = new Set<ListenerFn>()
   const viewport: Viewport = {
-    container,
     canvas,
     size: { x: 0, y: 0 },
     pixelRatio: 0,
@@ -44,7 +42,7 @@ export function initViewport(
   //
   updateViewport(canvas.getBoundingClientRect())
 
-  initResizeObserver(container, signal, updateViewport)
+  initResizeObserver(canvas, signal, updateViewport)
   initDevicePixelRatioListener(
     canvas,
     signal,
@@ -55,7 +53,7 @@ export function initViewport(
 }
 
 function initResizeObserver(
-  container: HTMLDivElement,
+  canvas: HTMLCanvasElement,
   signal: AbortSignal,
   updateViewport: UpdateViewportFn,
 ): void {
@@ -65,7 +63,7 @@ function initResizeObserver(
     invariant(entry)
     updateViewport(entry.contentRect)
   })
-  observer.observe(container)
+  observer.observe(canvas)
 
   signal.addEventListener('abort', () => {
     observer.disconnect()

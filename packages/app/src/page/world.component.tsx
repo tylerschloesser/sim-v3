@@ -18,13 +18,11 @@ function useWorldId() {
 
 export function WorldPage() {
   const worldId = useWorldId()
-  const container = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const [context, setContext] = useState<IContext | null>(
     null,
   )
   useEffect(() => {
-    invariant(container.current)
     invariant(canvas.current)
     const controller = new AbortController()
 
@@ -34,7 +32,6 @@ export function WorldPage() {
     })
 
     const viewport = initViewport(
-      container.current,
       canvas.current,
       controller.signal,
     )
@@ -51,12 +48,7 @@ export function WorldPage() {
   }, [worldId])
   return (
     <>
-      <div className={styles.container} ref={container}>
-        <canvas
-          className={styles.canvas}
-          ref={canvas}
-        ></canvas>
-      </div>
+      <canvas className={styles.canvas} ref={canvas} />
       {context && (
         <Context.Provider value={context}>
           <Outlet />

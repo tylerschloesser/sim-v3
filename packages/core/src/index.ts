@@ -72,7 +72,6 @@ export function cellSizeToZoom(
 type ViewportListenerFn = (viewport: Viewport) => void
 
 export interface Viewport {
-  container: HTMLDivElement
   canvas: HTMLCanvasElement
   size: Vec2
   pixelRatio: number
