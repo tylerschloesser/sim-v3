@@ -3,12 +3,13 @@ import { handlePointer } from './pointer.js'
 import { handleWheel } from './wheel.js'
 
 export const initCamera: InitFn<Camera> = async ({
-  canvas,
+  viewport,
   signal,
 }) => {
   const position: Vec2 = { x: 0, y: 0 }
   const zoom: number = 0.5
   const camera: Camera = { position, zoom }
+  const { canvas } = viewport
 
   // prettier-ignore
   {

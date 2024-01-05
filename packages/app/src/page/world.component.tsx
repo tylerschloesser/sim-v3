@@ -7,6 +7,7 @@ import {
   IContext,
   initContext,
 } from '../context.js'
+import { initViewport } from '../viewport.js'
 import styles from './world.module.scss'
 
 function useWorldId() {
@@ -32,10 +33,15 @@ export function WorldPage() {
       console.log('abort reason:', controller.signal.reason)
     })
 
+    const viewport = initViewport(
+      container.current,
+      canvas.current,
+      controller.signal,
+    )
+
     initContext({
       worldId,
-      container: container.current,
-      canvas: canvas.current,
+      viewport,
       signal: controller.signal,
     }).then(setContext)
 

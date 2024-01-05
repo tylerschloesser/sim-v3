@@ -3,15 +3,26 @@ import invariant from 'tiny-invariant'
 
 type UpdateViewportFn = (rect: DOMRectReadOnly) => void
 
+type ListenerFn = (viewport: Viewport) => void
+
 export function initViewport(
   container: HTMLDivElement,
   canvas: HTMLCanvasElement,
   signal: AbortSignal,
-  gl: WebGL2RenderingContext,
 ): Viewport {
+  const listeners = new Set<ListenerFn>()
   const viewport: Viewport = {
+    container,
+    canvas,
     size: { x: 0, y: 0 },
     pixelRatio: 0,
+    addListener(listener) {
+      listeners.add(listener)
+      listener(viewport)
+    },
+    removeListener(listener) {
+      invariant(listeners.delete(listener))
+    },
   }
 
   const updateViewport: UpdateViewportFn = (rect) => {
@@ -21,7 +32,11 @@ export function initViewport(
 
     canvas.width = viewport.size.x * viewport.pixelRatio
     canvas.height = viewport.size.y * viewport.pixelRatio
-    gl.viewport(0, 0, canvas.width, canvas.height)
+
+    for (const listener of listeners) {
+      listener(viewport)
+    }
+    // gl.viewport(0, 0, canvas.width, canvas.height)
   }
 
   // TODO this is not really necessary because the resize

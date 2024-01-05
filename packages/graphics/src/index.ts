@@ -18,7 +18,6 @@ import {
   WebGLAttributeLocation,
 } from './types.js'
 import vertSource from './vert.glsl'
-import { initViewport } from './viewport.js'
 
 export interface Graphics {
   clear(): void
@@ -26,19 +25,19 @@ export interface Graphics {
 }
 
 export const initGraphics: InitFn<Graphics> = async ({
-  container,
-  canvas,
-  signal,
+  viewport,
 }) => {
-  const gl = canvas.getContext('webgl2')
+  const gl = viewport.canvas.getContext('webgl2')
   invariant(gl)
 
-  const viewport = initViewport(
-    container,
-    canvas,
-    signal,
-    gl,
-  )
+  viewport.addListener(() => {
+    gl.viewport(
+      0,
+      0,
+      viewport.size.x * viewport.pixelRatio,
+      viewport.size.y * viewport.pixelRatio,
+    )
+  })
 
   const program = initProgram(gl)
   gl.useProgram(program)

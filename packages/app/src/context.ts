@@ -1,5 +1,5 @@
 import { initCamera } from '@sim-v3/camera'
-import { InitFn } from '@sim-v3/core'
+import { InitFn, Viewport } from '@sim-v3/core'
 import { initGame } from '@sim-v3/game'
 import { initGraphics } from '@sim-v3/graphics'
 import { initWorld } from '@sim-v3/world'
@@ -8,8 +8,7 @@ import { createContext } from 'react'
 type RenderFn = () => void
 
 export interface IContext {
-  container: HTMLDivElement
-  canvas: HTMLCanvasElement
+  viewport: Viewport
   render: RenderFn
   signal: AbortSignal
 }
@@ -30,10 +29,9 @@ export const initContext: InitFn<IContext> = async (
   ])
   const game = initGame(world, camera, graphics)
 
-  const { container, canvas, signal } = args
+  const { signal } = args
   const context: IContext = {
-    container,
-    canvas,
+    viewport: args.viewport,
     render: game.render,
     signal,
   }

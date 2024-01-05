@@ -17,9 +17,16 @@ export function getCellSize(camera: Camera): number {
   return 100
 }
 
+type ViewportListenerFn = (viewport: Viewport) => void
+
 export interface Viewport {
+  container: HTMLDivElement
+  canvas: HTMLCanvasElement
   size: Vec2
   pixelRatio: number
+
+  addListener(listener: ViewportListenerFn): void
+  removeListener(listener: ViewportListenerFn): void
 }
 
 // https://stackoverflow.com/a/17323608
@@ -29,8 +36,7 @@ export function mod(n: number, m: number): number {
 
 export interface InitArgs {
   worldId: string
-  container: HTMLDivElement
-  canvas: HTMLCanvasElement
+  viewport: Viewport
   signal: AbortSignal
 }
 
