@@ -29,7 +29,7 @@ export class CameraMomentum {
     this.camera = camera
     this.viewport = viewport
     this.signal = signal
-    self.requestAnimationFrame(this.update.bind(this))
+    self.requestAnimationFrame(this.update)
   }
 
   push(
@@ -38,6 +38,7 @@ export class CameraMomentum {
     t0: number,
     t1: number,
   ): void {
+    this.startTime = null
     this.i = (this.i + 1) % this.queue.length
     this.len = Math.min(this.len + 1, this.queue.length)
 
@@ -80,21 +81,27 @@ export class CameraMomentum {
     this.velocity.x = dx / dt
     this.velocity.y = dy / dt
     this.startTime = time
+
+    console.log(
+      this.velocity.x,
+      this.velocity.y,
+      this.startTime,
+    )
   }
 
-  update(time: number) {
+  update = (time: number) => {
     if (this.signal.aborted) {
       return
     }
 
-    self.requestAnimationFrame(this.update.bind(this))
+    self.requestAnimationFrame(this.update)
 
-    if (this.velocity.x === 0 && this.velocity.y === 0) {
-      return
-    }
     if (this.startTime === null) {
       return
     }
+    invariant(
+      this.velocity.x !== 0 || this.velocity.y !== 0,
+    )
 
     let dt = Math.min(time - this.startTime, this.duration)
     dt = smooth(dt / this.duration) * this.duration
