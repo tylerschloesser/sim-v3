@@ -18,6 +18,8 @@ export function drawGrid(
 ): void {
   const { gl, buffers, viewport } = context
 
+  gl.uniform4f(context.uniforms.color, 1, 1, 1, 1)
+
   const cellSize = zoomToCellSize(
     camera.zoom,
     viewport.size.x,
