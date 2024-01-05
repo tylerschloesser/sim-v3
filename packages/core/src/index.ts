@@ -27,15 +27,21 @@ export function clamp(
   return Math.min(max, Math.max(v, min))
 }
 
+function getMinCellSize(vx: number, vy: number): number {
+  return Math.max(vx, vy) * MIN_CELL_SIZE_FACTOR
+}
+
+function getMaxCellSize(vx: number, vy: number): number {
+  return Math.max(vx, vy) * MAX_CELL_SIZE_FACTOR
+}
+
 export function zoomToCellSize(
   zoom: number,
   vx: number,
   vy: number,
 ): number {
-  const minCellSize =
-    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
-  const maxCellSize =
-    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
+  const minCellSize = getMinCellSize(vx, vy)
+  const maxCellSize = getMaxCellSize(vx, vy)
   invariant(zoom >= MIN_ZOOM)
   invariant(zoom <= MAX_ZOOM)
   return minCellSize + (maxCellSize - minCellSize) * zoom
@@ -46,10 +52,8 @@ export function clampCellSize(
   vx: number,
   vy: number,
 ) {
-  const minCellSize =
-    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
-  const maxCellSize =
-    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
+  const minCellSize = getMinCellSize(vx, vy)
+  const maxCellSize = getMaxCellSize(vx, vy)
   return clamp(cellSize, minCellSize, maxCellSize)
 }
 
@@ -58,10 +62,8 @@ export function cellSizeToZoom(
   vx: number,
   vy: number,
 ): number {
-  const minCellSize =
-    Math.min(vx, vy) * MIN_CELL_SIZE_FACTOR
-  const maxCellSize =
-    Math.min(vx, vy) * MAX_CELL_SIZE_FACTOR
+  const minCellSize = getMinCellSize(vx, vy)
+  const maxCellSize = getMaxCellSize(vx, vy)
   const zoom =
     (cellSize - minCellSize) / (maxCellSize - minCellSize)
   return clamp(zoom, MIN_ZOOM, MAX_ZOOM)
