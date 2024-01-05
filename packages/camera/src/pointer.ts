@@ -6,7 +6,9 @@ import {
   dist,
   zoomToCellSize,
 } from '@sim-v3/core'
+import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
+import { Context } from './context.js'
 import { CameraMomentum } from './momentum.js'
 
 type PointerId = number
@@ -14,11 +16,11 @@ const pointerCache = new Map<PointerId, PointerEvent>()
 
 const momentum = new CameraMomentum(100)
 
-export function handlePointer(
-  camera: Camera,
-  viewport: Viewport,
-  ev: PointerEvent,
-): void {
+export const handlePointer = curry<
+  Context,
+  PointerEvent,
+  void
+>(({ camera, viewport }: Context, ev: PointerEvent) => {
   switch (ev.type) {
     case 'pointerup':
     case 'pointerout':
@@ -65,7 +67,7 @@ export function handlePointer(
       break
     }
   }
-}
+})
 
 function handleOneFingerDrag(
   camera: Camera,

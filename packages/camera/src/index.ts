@@ -1,4 +1,5 @@
 import { Camera, InitFn, Vec2 } from '@sim-v3/core'
+import { Context } from './context.js'
 import { handlePointer } from './pointer.js'
 import { handleWheel } from './wheel.js'
 
@@ -10,58 +11,19 @@ export const initCamera: InitFn<Camera> = async ({
   const zoom: number = 0.5
   const camera: Camera = { position, zoom }
   const { canvas } = viewport
+  const context: Context = { camera, viewport, signal }
+  const options: AddEventListenerOptions = { signal }
 
+  // prettier-ignore
   {
-    canvas.addEventListener(
-      'pointerup',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
-    canvas.addEventListener(
-      'pointerdown',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
-    canvas.addEventListener(
-      'pointerenter',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
-    canvas.addEventListener(
-      'pointerleave',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
-    canvas.addEventListener(
-      'pointercancel',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
-    canvas.addEventListener(
-      'pointermove',
-      (ev) => {
-        handlePointer(camera, viewport, ev)
-      },
-      { signal },
-    )
+    canvas.addEventListener('pointerup', handlePointer(context), options)
+    canvas.addEventListener('pointerdown', handlePointer(context), options)
+    canvas.addEventListener('pointerenter', handlePointer(context), options)
+    canvas.addEventListener('pointerleave', handlePointer(context), options)
+    canvas.addEventListener('pointercancel', handlePointer(context), options)
+    canvas.addEventListener('pointermove', handlePointer(context), options)
 
-    canvas.addEventListener(
-      'wheel',
-      (ev) => {
-        handleWheel(camera, viewport, ev)
-      },
-      { signal },
-    )
+    canvas.addEventListener('wheel', handleWheel(context), options)
   }
 
   return camera

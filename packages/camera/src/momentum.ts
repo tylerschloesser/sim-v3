@@ -1,14 +1,10 @@
 import { Camera, Vec2 } from '@sim-v3/core'
 import invariant from 'tiny-invariant'
 
-const velocity: Vec2 = { x: 0, y: 0 }
-
 export class CameraMomentum {
   i: number = 0
   len: number = 0
-
-  active: boolean = false
-
+  velocity: Vec2 = { x: 0, y: 0 }
   queue: {
     dx: number
     dy: number
@@ -45,8 +41,11 @@ export class CameraMomentum {
     cellSize: number,
     window: number,
   ): void {
-    let vx = 0
-    let vy = 0
+    this.velocity.x = 0
+    this.velocity.y = 0
+
+    let dx = 0
+    let dy = 0
 
     const now = performance.now()
     let dt = 0
@@ -56,23 +55,20 @@ export class CameraMomentum {
         (this.i + i) % this.queue.length,
       )
       invariant(val)
-      const { dx, dy, t0, t1 } = val
 
-      if (now - t0 < window) {
-        vx += dx
-        vy += dy
-        dt += t1 - t0
+      if (now - val.t0 < window) {
+        dx += val.dx
+        dy += val.dy
+        dt += val.t1 - val.t0
       }
     }
 
-    if (dt === 0 || (vx === 0 && vy === 0)) {
+    if (dt === 0 || (dx === 0 && dy === 0)) {
       return
     }
 
-    vx /= dt
-    vy /= dt
-
-    this.active = true
+    this.velocity.x = dx / dt
+    this.velocity.y = dy / dt
 
     self.requestAnimationFrame(this.update.bind(this))
   }
