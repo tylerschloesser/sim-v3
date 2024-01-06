@@ -5,35 +5,19 @@ import {
   mod,
   zoomToCellSize,
 } from '@sim-v3/core'
-import { mat4 } from 'gl-matrix'
+import { mat4, vec4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
+import { Color, rgb } from './color.js'
 import { Context } from './context.js'
 import { mat4Scale, mat4Translate } from './util.js'
 
 const transform: mat4 = mat4.create()
-
-// function updateColor(
-//   context: Context,
-//   camera: Camera,
-// ): void {
-//   const color = rgb(0.25 * camera.zoom * 255)
-//   context.gl.uniform4f(
-//     context.uniforms.color,
-//     color.r,
-//     color.g,
-//     color.b,
-//     color.a,
-//   )
-// }
 
 export function drawGrid(
   context: Context,
   camera: Camera,
 ): void {
   const { gl, buffers, viewport } = context
-
-  // updateColor(context, camera)
-  bindColorBuffer(context)
 
   const cellSize = zoomToCellSize(
     camera.zoom,
@@ -54,6 +38,9 @@ export function drawGrid(
   const cols = Math.ceil(viewport.size.x / cellSize) + 1
   const rows = Math.ceil(viewport.size.y / cellSize) + 1
   invariant(cols + rows <= matrices.length)
+
+  const color = rgb(0.25 * camera.zoom * 255)
+  bindColorBuffer(context, cols, rows, color)
 
   bindMatrixBuffer(context, cellSize, cols, rows)
 
@@ -149,4 +136,23 @@ function bindMatrixBuffer(
   }
 }
 
-function bindColorBuffer(context: Context): void {}
+function bindColorBuffer(
+  { gl, buffers, attributes }: Context,
+  cols: number,
+  rows: number,
+  color: Color,
+): void {
+  const { colors } = buffers.color
+  for (let i = 0; i < cols + rows; i++) {
+    const v = colors[i]
+    invariant(v)
+    vec4.set(v, color.r, color.g, color.b, color.a)
+  }
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color.buffer)
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, buffers.color.data)
+
+  gl.enableVertexAttribArray(attributes.color)
+  // prettier-ignore
+  gl.vertexAttribPointer(attributes.color, 4, gl.FLOAT, false, 0, 0)
+}
