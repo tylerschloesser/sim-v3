@@ -50,7 +50,6 @@ export class CameraTaper {
   ): void {
     invariant(t0 <= t1)
 
-    this.startTime = null
     this.i = (this.i + 1) % this.queue.length
     this.len = Math.min(this.len + 1, this.queue.length)
 
@@ -141,6 +140,10 @@ export class CameraTaper {
 
   clear(): void {
     this.i = this.len = 0
+  }
+
+  cancel(): void {
+    this.startTime = null
   }
 }
 

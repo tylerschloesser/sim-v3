@@ -19,7 +19,9 @@ export const handlePointer = curry<
   switch (ev.type) {
     case 'pointerup': {
       pointerCache.delete(ev.pointerId)
-      context.taper.start(100, ev.timeStamp)
+      if (pointerCache.size === 0) {
+        context.taper.start(100, ev.timeStamp)
+      }
       break
     }
     case 'pointerout':
@@ -32,6 +34,9 @@ export const handlePointer = curry<
     case 'pointermove': {
       const prev = pointerCache.get(ev.pointerId)
       pointerCache.set(ev.pointerId, ev)
+      if (ev.buttons) {
+        context.taper.cancel()
+      }
       if (!ev.buttons || !prev?.buttons) {
         break
       }
@@ -79,7 +84,8 @@ function handleTwoFingerDrag(
   next: PointerEvent,
   other: PointerEvent,
 ): void {
-  const { camera, viewport } = context
+  const { camera, viewport, taper } = context
+
   const ox = other.offsetX
   const oy = other.offsetY
   const px = prev.offsetX
@@ -122,6 +128,8 @@ function handleTwoFingerDrag(
   camera.position.x += dx
   camera.position.y += dy
   camera.zoom = cellSizeToZoom(nextCellSize, vx, vy)
+
+  taper.record(dx, dy, prev.timeStamp, next.timeStamp)
 }
 
 function getLastEventForOtherPointer(
