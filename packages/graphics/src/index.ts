@@ -1,10 +1,11 @@
 import { Camera, InitFn, Viewport } from '@sim-v3/core'
-import { mat4 } from 'gl-matrix'
+import { mat4, vec4 } from 'gl-matrix'
 import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
 import {
   Attributes,
   BufferType,
+  ColorBuffer,
   Context,
   MatrixBuffer,
   Uniforms,
@@ -45,12 +46,12 @@ export const initGraphics: InitFn<Graphics> = async ({
   const attributes: Attributes = {
     vertex: getAttribLocation(gl, program, 'aVertex'),
     matrix: getAttribLocation(gl, program, 'aMatrix'),
+    color: getAttribLocation(gl, program, 'aColor'),
   }
 
   // prettier-ignore
   const uniforms: Uniforms = {
     transform: getUniformLocation(gl, program, 'uTransform'),
-    color: getUniformLocation(gl, program, 'uColor')
   }
 
   const buffers = initBuffers(gl)
@@ -97,11 +98,9 @@ function initMatrixBuffer(
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
   const data = new Float32Array(count * 16)
-
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
 
   const matrices = new Array<mat4>(count)
-
   for (let i = 0; i < count; i++) {
     matrices[i] = data.subarray(i * 16, (i + 1) * 16)
   }
@@ -109,10 +108,31 @@ function initMatrixBuffer(
   return { type: BufferType.Matrix, data, buffer, matrices }
 }
 
+function initColorBuffer(
+  gl: WebGL2RenderingContext,
+): ColorBuffer {
+  const count = 2 ** 10
+
+  const buffer = gl.createBuffer()
+  invariant(buffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+
+  const data = new Float32Array(count * 4)
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
+
+  const colors = new Array<vec4>(count)
+  for (let i = 0; i < count; i++) {
+    colors[i] = data.subarray(i * 4, (i + 1) * 4)
+  }
+
+  return { type: BufferType.Color, data, buffer, colors }
+}
+
 function initBuffers(gl: WebGL2RenderingContext) {
   return {
     vertex: initVertexBuffer(gl),
     matrix: initMatrixBuffer(gl),
+    color: initColorBuffer(gl),
   }
 }
 
