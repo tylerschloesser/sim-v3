@@ -33,7 +33,12 @@ export const initContext: InitFn<IContext> = async (
     args.signal,
   )
 
-  const game = initGame(world, camera, graphics)
+  const game = initGame(
+    world,
+    args.viewport,
+    camera,
+    graphics,
+  )
 
   const { signal } = args
   const context: IContext = {
