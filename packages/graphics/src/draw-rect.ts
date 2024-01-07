@@ -1,8 +1,6 @@
 import {
   Camera,
-  Vec2,
   Viewport,
-  mod,
   zoomToCellSize,
 } from '@sim-v3/core'
 import { mat4, vec4 } from 'gl-matrix'
