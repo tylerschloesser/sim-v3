@@ -27,14 +27,13 @@ export interface Graphics {
   clear(): void
   drawGrid(camera: Camera): void
   drawRect(
-    camera: Camera,
     x: number,
     y: number,
     w: number,
     h: number,
     color: Color,
   ): void
-  flush(): void
+  flush(camera: Camera): void
 }
 
 export const initGraphics: InitFn<Graphics> = async ({
@@ -84,17 +83,16 @@ export const initGraphics: InitFn<Graphics> = async ({
       drawGrid(context, camera)
     },
     drawRect(
-      camera: Camera,
       x: number,
       y: number,
       w: number,
       h: number,
       color: Color,
     ) {
-      batchRect(context, camera, x, y, w, h, color)
+      batchRect(x, y, w, h, color)
     },
-    flush() {
-      drawBatchedRects(context)
+    flush(camera: Camera) {
+      drawBatchedRects(context, camera)
     },
   }
 }
