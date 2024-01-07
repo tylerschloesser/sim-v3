@@ -12,6 +12,7 @@ import {
   VertexBuffer,
 } from './context.js'
 import { drawGrid } from './draw-grid.js'
+import { drawRect } from './draw-rect.js'
 import fragSource from './frag.glsl'
 import {
   ShaderSource,
@@ -23,6 +24,7 @@ import vertSource from './vert.glsl'
 export interface Graphics {
   clear(): void
   drawGrid(camera: Camera): void
+  drawRect(camera: Camera): void
 }
 
 export const initGraphics: InitFn<Graphics> = async ({
@@ -68,6 +70,7 @@ export const initGraphics: InitFn<Graphics> = async ({
   return {
     clear: () => clear(gl),
     drawGrid: curry<Context, Camera, Viewport, void>(drawGrid)(context),
+    drawRect: curry<Context, Camera, Viewport, void>(drawRect)(context),
   }
 }
 
