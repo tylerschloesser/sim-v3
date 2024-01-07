@@ -4,7 +4,6 @@ import { Context } from './context.js'
 export function drawRect(
   context: Context,
   camera: Camera,
-  viewport: Viewport,
   x: number,
   y: number,
   w: number,

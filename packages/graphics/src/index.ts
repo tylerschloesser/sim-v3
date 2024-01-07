@@ -85,7 +85,7 @@ export const initGraphics: InitFn<Graphics> = async ({
       w: number,
       h: number,
     ) {
-      drawRect(context, camera, viewport, x, y, w, h)
+      drawRect(context, camera, x, y, w, h)
     },
   }
 }
