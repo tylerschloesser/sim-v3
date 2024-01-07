@@ -1,4 +1,5 @@
-import { Camera, Viewport } from '@sim-v3/core'
+import { Camera } from '@sim-v3/core'
+import { Color } from './color.js'
 import { Context } from './context.js'
 
 export function drawRect(
@@ -8,4 +9,5 @@ export function drawRect(
   y: number,
   w: number,
   h: number,
+  color: Color,
 ): void {}
