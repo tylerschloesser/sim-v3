@@ -4,7 +4,10 @@ import { Context } from './context.js'
 import { clampZoom } from './zoom.js'
 
 export const handleWheel = curry<Context, WheelEvent, void>(
-  ({ camera, viewport }: Context, ev: WheelEvent) => {
+  (
+    { camera, viewport, taper }: Context,
+    ev: WheelEvent,
+  ) => {
     const prevZoom = camera.zoom
     const vx = viewport.size.x
     const vy = viewport.size.y
@@ -14,6 +17,8 @@ export const handleWheel = curry<Context, WheelEvent, void>(
     )
 
     if (prevZoom === nextZoom) return
+
+    taper.cancel()
 
     const rx = ev.offsetX - vx / 2
     const ry = ev.offsetY - vy / 2
