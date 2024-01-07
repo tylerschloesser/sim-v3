@@ -3,7 +3,7 @@ import { Camera, Viewport } from '@sim-v3/core'
 const cell = { x: 0, y: 0 }
 
 export function* iterateCells(
-  viewport: Viewport,
+  viewport: Pick<Viewport, 'size'>,
   camera: Camera,
 ) {
   for (let x = 0; x < 2; x++) {
