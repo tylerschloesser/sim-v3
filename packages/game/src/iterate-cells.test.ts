@@ -1,12 +1,12 @@
 import { describe, expect, test } from '@jest/globals'
-import { Camera, Viewport } from '@sim-v3/core'
+import { Camera, Vec2, Viewport } from '@sim-v3/core'
 import { iterateCells } from './iterate-cells.js'
 
 describe('iterate-cells', () => {
   describe('iterateCells', () => {
     test('base', () => {
       const viewport: Pick<Viewport, 'size'> = {
-        size: { x: 100, y: 100 },
+        size: { x: 10, y: 10 },
       }
 
       const camera: Camera = {
@@ -14,12 +14,24 @@ describe('iterate-cells', () => {
         zoom: 0.5,
       }
 
-      const cells = Array.from(
-        iterateCells(viewport, camera),
-      )
+      const cellSize = 5
+
+      const cells: Vec2[] = []
+
+      for (const cell of iterateCells(
+        viewport,
+        camera,
+        cellSize,
+      )) {
+        cells.push({ ...cell })
+      }
       expect(cells.length).toBe(4)
-      // TODO seed random
-      // expect(cells).toMatchSnapshot()
+      expect(cells).toEqual([
+        { x: -1, y: -1 },
+        { x: -1, y: 0 },
+        { x: 0, y: -1 },
+        { x: 0, y: 0 },
+      ])
     })
   })
 })
