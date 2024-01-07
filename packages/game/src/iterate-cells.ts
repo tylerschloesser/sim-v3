@@ -10,8 +10,8 @@ export function* iterateCells(
   const xCellCount = viewport.size.x / cellSize
   const yCellCount = viewport.size.y / cellSize
 
-  const x0 = camera.position.x - Math.floor(xCellCount / 2)
-  const y0 = camera.position.y - Math.floor(yCellCount / 2)
+  const x0 = Math.floor(camera.position.x - xCellCount / 2)
+  const y0 = Math.floor(camera.position.y - yCellCount / 2)
 
   for (let x = 0; x < Math.ceil(xCellCount); x++) {
     for (let y = 0; y < Math.ceil(yCellCount); y++) {

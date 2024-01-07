@@ -18,6 +18,20 @@ describe('iterate-cells', () => {
           { x: 0, y: 0 },
         ],
       },
+      {
+        cameraPosition: { x: 0.5, y: 0.5 },
+        expected: [
+          { x: -1, y: -1 },
+          { x: -1, y: 0 },
+          { x: -1, y: 1 },
+          { x: 0, y: -1 },
+          { x: 0, y: 0 },
+          { x: 0, y: 1 },
+          { x: 1, y: -1 },
+          { x: 1, y: 0 },
+          { x: 1, y: 1 },
+        ],
+      },
     ]
 
     for (let i = 0; i < testCases.length; i++) {
