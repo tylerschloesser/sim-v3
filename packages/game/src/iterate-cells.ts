@@ -13,10 +13,13 @@ export function* iterateCells(
   const x0 = Math.floor(camera.position.x - xCellCount / 2)
   const y0 = Math.floor(camera.position.y - yCellCount / 2)
 
-  for (let x = 0; x < Math.ceil(xCellCount); x++) {
-    for (let y = 0; y < Math.ceil(yCellCount); y++) {
-      cell.x = x0 + x
-      cell.y = y0 + y
+  const xN = Math.ceil(camera.position.x + xCellCount / 2)
+  const yN = Math.ceil(camera.position.y + yCellCount / 2)
+
+  for (let x = x0; x < xN; x++) {
+    for (let y = y0; y < yN; y++) {
+      cell.x = x
+      cell.y = y
       yield cell
     }
   }
