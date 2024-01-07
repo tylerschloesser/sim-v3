@@ -154,5 +154,5 @@ function bindColorBuffer(
   gl.enableVertexAttribArray(attributes.color)
   // prettier-ignore
   gl.vertexAttribPointer(attributes.color, 4, gl.FLOAT, false, 0, 0)
-  gl.vertexAttribDivisor(attributes.color, 4)
+  gl.vertexAttribDivisor(attributes.color, 1)
 }
