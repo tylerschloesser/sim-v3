@@ -1,6 +1,7 @@
 import { Camera, InitFn } from '@sim-v3/core'
 import { mat4, vec4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
+import { Color } from './color.js'
 import {
   Attributes,
   BufferType,
@@ -20,6 +21,8 @@ import {
 } from './types.js'
 import vertSource from './vert.glsl'
 
+export * from './color.js'
+
 export interface Graphics {
   clear(): void
   drawGrid(camera: Camera): void
@@ -29,6 +32,7 @@ export interface Graphics {
     y: number,
     w: number,
     h: number,
+    color: Color,
   ): void
   flush(): void
 }
