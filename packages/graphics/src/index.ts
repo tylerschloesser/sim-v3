@@ -30,6 +30,7 @@ export interface Graphics {
     w: number,
     h: number,
   ): void
+  flush(): void
 }
 
 export const initGraphics: InitFn<Graphics> = async ({
@@ -87,6 +88,7 @@ export const initGraphics: InitFn<Graphics> = async ({
     ) {
       drawRect(context, camera, x, y, w, h)
     },
+    flush() {},
   }
 }
 
