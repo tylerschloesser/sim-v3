@@ -1,5 +1,5 @@
 import { Camera } from '@sim-v3/core'
-import { Graphics } from '@sim-v3/graphics'
+import { Graphics, rgb } from '@sim-v3/graphics'
 import { World } from '@sim-v3/world'
 
 export interface Game {
@@ -15,6 +15,8 @@ export function initGame(
     render() {
       graphics.clear()
       graphics.drawGrid(camera)
+      graphics.drawRect(0, 0, 1, 1, rgb(1, 0, 0))
+      graphics.flush(camera)
     },
   }
 }

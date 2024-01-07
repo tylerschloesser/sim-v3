@@ -4,7 +4,7 @@ import { Color, rgb } from './color.js'
 import { Context } from './context.js'
 
 let i = 0
-const batched = new Array(2 ** 10).map(() => ({
+const batched = new Array(2 ** 10).fill(null).map(() => ({
   x: 0,
   y: 0,
   w: 0,
