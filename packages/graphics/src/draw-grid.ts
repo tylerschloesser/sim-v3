@@ -34,10 +34,9 @@ export function drawGrid(
 
   bindVertexBuffer(context)
 
-  const { matrices } = buffers.matrix
   const cols = Math.ceil(viewport.size.x / cellSize) + 1
   const rows = Math.ceil(viewport.size.y / cellSize) + 1
-  invariant(cols + rows <= matrices.length)
+  invariant(cols + rows <= buffers.matrix.matrices.length)
 
   const color = rgb(0.25 * camera.zoom * 255)
   bindColorBuffer(context, cols, rows, color)
@@ -155,4 +154,5 @@ function bindColorBuffer(
   gl.enableVertexAttribArray(attributes.color)
   // prettier-ignore
   gl.vertexAttribPointer(attributes.color, 4, gl.FLOAT, false, 0, 0)
+  gl.vertexAttribDivisor(attributes.color, 4)
 }

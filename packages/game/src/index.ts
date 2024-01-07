@@ -15,7 +15,7 @@ export function initGame(
     render() {
       graphics.clear()
       graphics.drawGrid(camera)
-      graphics.drawRect(0, 0, 1, 1, rgb(1, 0, 0))
+      graphics.drawRect(0, 0, 1, 1, rgb(255, 0, 0))
       graphics.flush(camera)
     },
   }
