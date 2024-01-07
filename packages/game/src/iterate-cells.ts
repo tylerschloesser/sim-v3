@@ -4,7 +4,7 @@ const cell = { x: 0, y: 0 }
 
 export function* iterateCells(
   viewport: Pick<Viewport, 'size'>,
-  camera: Camera,
+  camera: Pick<Camera, 'position'>,
   cellSize: number,
 ) {
   const xCellCount = viewport.size.x / cellSize
