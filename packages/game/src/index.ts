@@ -1,5 +1,5 @@
 import { Camera, Viewport } from '@sim-v3/core'
-import { Graphics } from '@sim-v3/graphics'
+import { Graphics, rgb } from '@sim-v3/graphics'
 import { World } from '@sim-v3/world'
 import { iterateCells } from './iterate-cells.js'
 
@@ -17,8 +17,9 @@ export function initGame(
     render() {
       graphics.clear()
       graphics.drawGrid(camera)
-      for (const cell of iterateCells()) {
-        graphics.drawRect(cell.x, cell.y, 1, 1, cell.color)
+      for (const cell of iterateCells(viewport, camera)) {
+        const color = rgb(Math.random() * 255, 0, 0)
+        graphics.drawRect(cell.x, cell.y, 1, 1, color)
       }
       graphics.flush(camera)
     },
