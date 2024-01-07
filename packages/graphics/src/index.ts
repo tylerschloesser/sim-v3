@@ -12,7 +12,7 @@ import {
   VertexBuffer,
 } from './context.js'
 import { drawGrid } from './draw-grid.js'
-import { drawRect } from './draw-rect.js'
+import { batchRect, drawBatchedRects } from './draw-rect.js'
 import fragSource from './frag.glsl'
 import {
   ShaderSource,
@@ -91,9 +91,11 @@ export const initGraphics: InitFn<Graphics> = async ({
       h: number,
       color: Color,
     ) {
-      drawRect(context, camera, x, y, w, h, color)
+      batchRect(context, camera, x, y, w, h, color)
     },
-    flush() {},
+    flush() {
+      drawBatchedRects(context)
+    },
   }
 }
 
