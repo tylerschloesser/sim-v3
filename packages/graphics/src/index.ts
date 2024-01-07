@@ -1,6 +1,5 @@
-import { Camera, InitFn, Viewport } from '@sim-v3/core'
+import { Camera, InitFn } from '@sim-v3/core'
 import { mat4, vec4 } from 'gl-matrix'
-import curry from 'lodash/fp/curry.js'
 import invariant from 'tiny-invariant'
 import {
   Attributes,
@@ -24,7 +23,13 @@ import vertSource from './vert.glsl'
 export interface Graphics {
   clear(): void
   drawGrid(camera: Camera): void
-  drawRect(camera: Camera): void
+  drawRect(
+    camera: Camera,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): void
 }
 
 export const initGraphics: InitFn<Graphics> = async ({
@@ -66,11 +71,22 @@ export const initGraphics: InitFn<Graphics> = async ({
     buffers,
   }
 
-  // prettier-ignore
   return {
-    clear: () => clear(gl),
-    drawGrid: curry<Context, Camera, Viewport, void>(drawGrid)(context),
-    drawRect: curry<Context, Camera, Viewport, void>(drawRect)(context),
+    clear() {
+      clear(gl)
+    },
+    drawGrid(camera: Camera) {
+      drawGrid(context, camera)
+    },
+    drawRect(
+      camera: Camera,
+      x: number,
+      y: number,
+      w: number,
+      h: number,
+    ) {
+      drawRect(context, camera, viewport, x, y, w, h)
+    },
   }
 }
 
