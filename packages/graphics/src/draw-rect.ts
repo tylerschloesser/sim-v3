@@ -6,13 +6,14 @@ import {
 import { mat4, vec4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
 import { Color, rgb } from './color.js'
+import { LIMIT } from './const.js'
 import { Context } from './context.js'
 import { mat4Scale, mat4Translate } from './util.js'
 
 const transform: mat4 = mat4.create()
 
 let count = 0
-const batched = new Array(2 ** 10).fill(null).map(() => ({
+const batched = new Array(LIMIT).fill(null).map(() => ({
   x: 0,
   y: 0,
   w: 0,

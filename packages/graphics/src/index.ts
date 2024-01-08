@@ -2,6 +2,7 @@ import { Camera, InitFn } from '@sim-v3/core'
 import { mat4, vec4 } from 'gl-matrix'
 import invariant from 'tiny-invariant'
 import { Color } from './color.js'
+import { LIMIT } from './const.js'
 import {
   Attributes,
   BufferType,
@@ -117,17 +118,15 @@ function initVertexBuffer(
 function initMatrixBuffer(
   gl: WebGL2RenderingContext,
 ): MatrixBuffer {
-  const count = 2 ** 10
-
   const buffer = gl.createBuffer()
   invariant(buffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  const data = new Float32Array(count * 16)
+  const data = new Float32Array(LIMIT * 16)
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
 
-  const matrices = new Array<mat4>(count)
-  for (let i = 0; i < count; i++) {
+  const matrices = new Array<mat4>(LIMIT)
+  for (let i = 0; i < LIMIT; i++) {
     matrices[i] = data.subarray(i * 16, (i + 1) * 16)
   }
 
@@ -137,17 +136,15 @@ function initMatrixBuffer(
 function initColorBuffer(
   gl: WebGL2RenderingContext,
 ): ColorBuffer {
-  const count = 2 ** 10
-
   const buffer = gl.createBuffer()
   invariant(buffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
 
-  const data = new Float32Array(count * 4)
+  const data = new Float32Array(LIMIT * 4)
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
 
-  const colors = new Array<vec4>(count)
-  for (let i = 0; i < count; i++) {
+  const colors = new Array<vec4>(LIMIT)
+  for (let i = 0; i < LIMIT; i++) {
     colors[i] = data.subarray(i * 4, (i + 1) * 4)
   }
 
