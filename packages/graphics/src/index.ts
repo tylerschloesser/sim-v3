@@ -94,6 +94,9 @@ export const initGraphics: InitFn<Graphics> = async ({
     },
     flush(camera: Camera) {
       drawBatchedRects(context, camera)
+
+      // TODO test if this actually helps
+      gl.invalidateFramebuffer(gl.FRAMEBUFFER, [])
     },
   }
 }
